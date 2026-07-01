@@ -24,3 +24,7 @@ backend/secrets.properties
 backend/logs/
 backend/uploads/
 backend/photos/avatars/
+
+.env.aws
+*.pem
+.env.ec2
