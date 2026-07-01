@@ -1,0 +1,141 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ 'admin.enrollments.title' | t }}</h5>
+  </div>
+
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-sm-6 col-md-3">
+      <select id="enf-user" class="form-select form-select-sm" [ngModel]="filterUserId()"
+              (ngModelChange)="onUserIdChange($event)">
+        <option [ngValue]="null">— {{ 'admin.enrollments.filterUser' | t }} —</option>
+        <option *ngFor="let u of users()" [ngValue]="u.id">[{{ u.id }}] {{ u.login }}</option>
+      </select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+      <select id="enf-course" class="form-select form-select-sm" [ngModel]="filterCourseId()"
+              (ngModelChange)="onCourseIdChange($event)">
+        <option [ngValue]="null">— {{ 'admin.enrollments.filterCourse' | t }} —</option>
+        <option *ngFor="let c of courses()" [ngValue]="c.id">[{{ c.id }}] {{ c.title }}</option>
+      </select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+      <select id="enf-status" class="form-select form-select-sm" [ngModel]="filterStatus()"
+              (ngModelChange)="onStatusChange($event || '')">
+        <option value="">{{ 'admin.enrollments.filterStatus' | t }}</option>
+        <option *ngFor="let s of statusOptions" [value]="s">{{ ('admin.enrollments.statuses.' + s) | t }}</option>
+      </select>
+    </div>
+    <div class="col-12 col-sm-6 col-md-2 ms-auto">
+      <button class="btn btn-outline-secondary btn-sm w-100" (click)="clearFilters()">{{ 'common.clearFilters' | t }}
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.enrollments.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('userId')" style="cursor:pointer">{{ 'admin.enrollments.user' | t }}
+              <span>{{ sortArrow('userId') }}</span></th>
+            <th (click)="toggleSort('courseId')" style="cursor:pointer">{{ 'admin.enrollments.course' | t }}
+              <span>{{ sortArrow('courseId') }}</span></th>
+            <th (click)="toggleSort('status')" style="cursor:pointer">{{ 'admin.enrollments.status' | t }}
+              <span>{{ sortArrow('status') }}</span></th>
+            <th (click)="toggleSort('currentLessonId')"
+                style="cursor:pointer">{{ 'admin.enrollments.currentLesson' | t }}
+              <span>{{ sortArrow('currentLessonId') }}</span></th>
+            <th (click)="toggleSort('startedAt')" style="cursor:pointer">{{ 'admin.enrollments.startedAt' | t }}
+              <span>{{ sortArrow('startedAt') }}</span></th>
+            <th (click)="toggleSort('completedAt')" style="cursor:pointer">{{ 'admin.enrollments.completedAt' | t }}
+              <span>{{ sortArrow('completedAt') }}</span></th>
+            <th (click)="toggleSort('lastActivityAt')" style="cursor:pointer">{{ 'admin.enrollments.lastActivity' | t }}
+              <span>{{ sortArrow('lastActivityAt') }}</span></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let e of pageRows(); trackBy: trackById">
+            <td>{{ e.id }}</td>
+            <td>{{ e.userId }}</td>
+            <td>{{ e.courseId }}</td>
+            <td>{{ ('admin.enrollments.statuses.' + e.status) | t }}</td>
+            <td>{{ e.currentLessonId || '—' }}</td>
+            <td>{{ e.startedAt ? (e.startedAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+            <td>{{ e.completedAt ? (e.completedAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+            <td>{{ e.lastActivityAt ? (e.lastActivityAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(e)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(e.id)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <div *ngIf="editingId() !== null" class="card mt-3">
+      <div class="card-header">
+        {{ 'common.edit' | t }} – {{ 'admin.enrollments.title' | t }} #{{ editingId() }}
+      </div>
+
+      <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+        <div class="row g-2">
+          <div class="col-md-6">
+            <label class="form-label" for="en-current">{{ 'admin.enrollments.currentLesson' | t }}</label>
+            <input id="en-current" type="number" class="form-control" formControlName="currentLessonId" min="1"/>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+          <button class="btn btn-primary" [disabled]="form.invalid">{{ 'common.save' | t }}</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

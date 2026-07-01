@@ -1,0 +1,10 @@
+.bg-body-tertiary {
+  // lekkie tło dopasowane do Twojego motywu
+  background-color: var(--bs-body-bg);
+}
+.navbar .nav-link.active {
+  font-weight: 600;
+}
+.obj-cover {
+  object-fit: cover;
+}

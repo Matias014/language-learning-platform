@@ -1,0 +1,129 @@
+<div class="container py-3">
+  <h5 class="mb-3">{{ 'admin.attempts.title' | t }}</h5>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.attempts.user' | t }}</label>
+          <input type="number" class="form-control" min="1" step="1" inputmode="numeric"
+                 [ngModel]="filterUserId()"
+                 (ngModelChange)="onUserIdChange($event)"/>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.attempts.exercise' | t }}</label>
+          <input type="number" class="form-control" min="1" step="1" inputmode="numeric"
+                 [ngModel]="filterExerciseId()"
+                 (ngModelChange)="onExerciseIdChange($event)"/>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.attempts.filterCorrect' | t }}</label>
+          <select class="form-select" [ngModel]="filterCorrect()" (ngModelChange)="onCorrectChange($event)">
+            <option value="">{{ 'common.all' | t }}</option>
+            <option value="true">{{ 'admin.attempts.onlyCorrect' | t }}</option>
+            <option value="false">{{ 'admin.attempts.onlyIncorrect' | t }}</option>
+          </select>
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button type="button" class="btn btn-light" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+      <div class="form-text mt-2">{{ 'admin.attempts.filtersHelp' | t }}</div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.userProgress.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('userId')" style="cursor:pointer">{{ 'admin.attempts.user' | t }}
+              <span>{{ sortArrow('userId') }}</span></th>
+            <th (click)="toggleSort('exerciseId')" style="cursor:pointer">{{ 'admin.attempts.exercise' | t }}
+              <span>{{ sortArrow('exerciseId') }}</span></th>
+            <th (click)="toggleSort('attemptNumber')" style="cursor:pointer">{{ 'admin.attempts.attemptNo' | t }}
+              <span>{{ sortArrow('attemptNumber') }}</span></th>
+            <th (click)="toggleSort('correct')" style="cursor:pointer">{{ 'admin.attempts.correct' | t }}
+              <span>{{ sortArrow('correct') }}</span></th>
+            <th (click)="toggleSort('score')" style="cursor:pointer">{{ 'admin.attempts.score' | t }}
+              <span>{{ sortArrow('score') }}</span></th>
+            <th (click)="toggleSort('submittedAt')" style="cursor:pointer">{{ 'admin.attempts.submittedAt' | t }}
+              <span>{{ sortArrow('submittedAt') }}</span></th>
+            <th (click)="toggleSort('durationSeconds')" style="cursor:pointer">{{ 'admin.attempts.duration' | t }}
+              <span>{{ sortArrow('durationSeconds') }}</span></th>
+            <th>{{ 'admin.attempts.answer' | t }}</th>
+            <th>{{ 'admin.attempts.feedback' | t }}</th>
+            <th class="text-end">{{ 'common.actions' | t }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let a of pageRows(); trackBy: trackById">
+            <td>{{ a.id }}</td>
+            <td>{{ a.userId }}</td>
+            <td>{{ a.exerciseId }}</td>
+            <td>{{ a.attemptNumber }}</td>
+            <td>
+              <span class="badge" [class.bg-success]="a.correct" [class.bg-danger]="!a.correct">
+                {{ a.correct ? '✓' : '✗' }}
+              </span>
+            </td>
+            <td>{{ asPercent(a.score) }}</td>
+            <td>{{ a.submittedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ a.durationSeconds ?? '—' }}</td>
+            <td><span [attr.title]="a.submittedAnswer || undefined">{{ a.submittedAnswer || '—' }}</span></td>
+            <td><span [attr.title]="a.feedback || undefined">{{ a.feedback || '—' }}</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(a.id)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

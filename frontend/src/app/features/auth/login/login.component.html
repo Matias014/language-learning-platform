@@ -1,0 +1,78 @@
+<div class="auth-lang text-end">
+  <app-lang-switcher></app-lang-switcher>
+</div>
+
+<div class="auth-card">
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="card-title mb-3 text-center">{{ 'auth.login.title' | t }}</h5>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="loginInput">{{ 'auth.login.loginOrEmail' | t }}</label>
+          <input
+            id="loginInput"
+            type="text"
+            class="form-control"
+            formControlName="login"
+            [class.is-invalid]="submitted() && loginCtrl.invalid"
+            autocomplete="username"
+          />
+          <div *ngIf="submitted() && loginCtrl.hasError('required')" class="invalid-feedback d-block">
+            {{ 'validation.required' | t }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="passwordInput">{{ 'auth.common.password' | t }}</label>
+          <input
+            id="passwordInput"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            [class.is-invalid]="submitted() && passwordCtrl.invalid"
+            autocomplete="current-password"
+          />
+          <div *ngIf="submitted() && passwordCtrl.hasError('required')" class="invalid-feedback d-block">
+            {{ 'validation.required' | t }}
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe" formControlName="remember"/>
+            <label class="form-check-label" for="rememberMe">{{ 'auth.login.remember' | t }}</label>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit" [disabled]="loading()">
+          <span *ngIf="!loading()">{{ 'auth.login.submit' | t }}</span>
+          <span *ngIf="loading()" class="spinner-border spinner-border-sm"></span>
+        </button>
+
+        <div *ngIf="error()" class="alert alert-danger mt-3">{{ error() }}</div>
+
+        <div class="text-center mt-3">
+          <span class="text-body-secondary small">{{ 'auth.login.noAccount' | t }}</span>
+          <a routerLink="/register" class="small ms-1">{{ 'auth.login.registerCta' | t }}</a>
+        </div>
+
+        <div class="text-center mt-3">
+          <a class="btn btn-outline-secondary btn-sm" routerLink="/home">{{ 'common.goHome' | t }}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

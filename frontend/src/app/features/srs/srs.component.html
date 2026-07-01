@@ -1,0 +1,84 @@
+<div class="container py-4" *ngIf="!loading(); else loadTpl">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h4 class="mb-0">{{ 'srs.title' | t }}</h4>
+  </div>
+
+  <div class="alert alert-info mb-3" aria-live="polite">
+    {{ 'srs.info.completedFromActive' | t }}
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger" aria-live="assertive">{{ error() | t }}</div>
+
+  <ng-container *ngIf="!error()">
+    <div *ngIf="empty()" class="alert alert-success" aria-live="polite">{{ 'srs.empty.today' | t }}</div>
+
+    <div class="row g-3" *ngIf="!empty()">
+      <div class="col-lg-6" *ngIf="dueSrs().length">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="fw-semibold mb-2">{{ 'srs.sections.dueToday' | t }}</div>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item" *ngFor="let s of dueSrs(); trackBy: trackBySrsId">
+                <div class="small text-body-secondary mb-1">
+                  {{ lessonFor(s)?.title || ('srs.labels.lesson' | t) }}
+                  • {{ 'srs.labels.stage' | t:{now: (s.repetitions + 1)} }}
+                </div>
+                <div class="fw-semibold mb-2">{{ exFor(s)?.question || '—' }}</div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="badge text-bg-success">+{{ exFor(s)?.xp || 0 }} XP</span>
+                  <button type="button" class="btn btn-outline-primary btn-sm" (click)="openLesson(s)">
+                    {{ 'srs.buttons.openLesson' | t }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer small text-body-secondary">
+            {{ 'srs.labels.total' | t:{count: dueSrs().length} }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" *ngIf="upcomingSrs().length">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="fw-semibold mb-2">{{ 'srs.sections.upcoming' | t }}</div>
+            <div class="list-group list-group-flush">
+              <div class="list-group-item" *ngFor="let s of upcomingSrs(); trackBy: trackBySrsId">
+                <div class="small text-body-secondary mb-1">
+                  {{ lessonFor(s)?.title || ('srs.labels.lesson' | t) }}
+                  • {{ 'srs.labels.stage' | t:{now: (s.repetitions + 1)} }}
+                </div>
+                <div class="fw-semibold mb-1">{{ exFor(s)?.question || '—' }}</div>
+                <div class="small text-body-secondary">
+                  {{ 'srs.labels.dueDate' | t:{date: nextDueISO(s)} }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer small text-body-secondary">
+            {{ 'srs.labels.total' | t:{count: upcomingSrs().length} }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #loadTpl>
+  <div class="text-center py-5">
+    <div class="spinner-border" role="status" aria-live="polite"></div>
+  </div>
+</ng-template>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

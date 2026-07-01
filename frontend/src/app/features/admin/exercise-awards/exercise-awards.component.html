@@ -1,0 +1,111 @@
+<div class="container py-3">
+  <h5 class="mb-3">{{ 'admin.awards.title' | t }}</h5>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.awards.user' | t }}</label>
+          <input
+            id="awd-user"
+            type="number"
+            class="form-control"
+            [ngModel]="filterUserId()"
+            (ngModelChange)="onUserIdChange($event)"
+            min="1" step="1" inputmode="numeric"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.awards.attempt' | t }}</label>
+          <input
+            id="awd-att"
+            type="number"
+            class="form-control"
+            [ngModel]="filterAttemptId()"
+            (ngModelChange)="onAttemptIdChange($event)"
+            min="1" step="1" inputmode="numeric"
+          />
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button type="button" class="btn btn-light" (click)="clearFilters()">
+            {{ 'common.clear' | t }}
+          </button>
+        </div>
+      </div>
+      <div class="text-body-secondary small mt-2">
+        {{ 'admin.awards.filtersHelp' | t }}
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.awards.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('attemptId')" style="cursor:pointer">{{ 'admin.awards.attempt' | t }}
+              <span>{{ sortArrow('attemptId') }}</span></th>
+            <th (click)="toggleSort('awardedXp')" style="cursor:pointer">{{ 'admin.awards.xp' | t }}
+              <span>{{ sortArrow('awardedXp') }}</span></th>
+            <th (click)="toggleSort('awardedAt')" style="cursor:pointer">{{ 'admin.awards.createdAt' | t }}
+              <span>{{ sortArrow('awardedAt') }}</span></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let a of pageRows(); trackBy: trackById">
+            <td>{{ a.id }}</td>
+            <td>{{ a.attemptId }}</td>
+            <td>{{ a.awardedXp }}</td>
+            <td>{{ a.awardedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

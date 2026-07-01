@@ -1,0 +1,116 @@
+<div class="container py-4" *ngIf="!loading(); else loadTpl">
+  <div class="card chat-card shadow-sm" *ngIf="session() as s; else missingTpl">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div class="fw-semibold text-truncate">
+        <ng-container *ngIf="!editTitle(); else editTpl">
+          {{ s.title || ('chat.session.untitled' | t) }}
+          <button class="btn btn-link btn-sm p-0 ms-2" (click)="startEditTitle()">
+            {{ 'chat.session.rename' | t }}
+          </button>
+        </ng-container>
+        <ng-template #editTpl>
+          <div class="input-group input-group-sm" style="max-width: 420px;">
+            <input type="text" class="form-control" maxlength="200" [ngModel]="titleEdit()"
+                   (ngModelChange)="titleEdit.set($event)"/>
+            <button class="btn btn-primary" (click)="saveTitle()">{{ 'common.save' | t }}</button>
+            <button class="btn btn-outline-secondary" (click)="cancelEditTitle()">{{ 'common.cancel' | t }}</button>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="d-flex gap-2 align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <label class="form-label m-0 small d-none d-md-inline text-nowrap">
+            {{ 'chat.session.language' | t }}
+          </label>
+          <select class="form-select form-select-sm"
+                  style="min-width:180px"
+                  [ngModel]="selectedLang()"
+                  (ngModelChange)="onLangSelect($event)"
+                  [disabled]="langBusy()">
+            <option *ngIf="!s.conversationLanguageCode" value="">{{ 'lang.switch' | t }}: {{ 'chat.lang.auto' | t }}
+            </option>
+            <option *ngFor="let l of languages()" [value]="l.code">{{ l.name }}</option>
+          </select>
+        </div>
+
+        <a routerLink="/chat/sessions" class="btn btn-sm btn-outline-secondary">
+          {{ 'chat.session.new' | t }}
+        </a>
+
+        <ng-container *ngIf="!confirmDelete(); else confirmTpl">
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="confirmDelete.set(true)">
+            {{ 'chat.list.delete' | t }}
+          </button>
+        </ng-container>
+        <ng-template #confirmTpl>
+          <div class="confirm-inline">
+            <span>{{ 'common.areYouSure' | t }}</span>
+            <button type="button" class="btn btn-sm btn-danger" (click)="deleteSession()">
+              {{ 'chat.list.delete' | t }}
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="confirmDelete.set(false)">
+              {{ 'common.cancel' | t }}
+            </button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="card-body chat-body" #scrollContainer role="log" aria-live="polite" aria-relevant="additions text">
+      <div *ngFor="let m of messages()" class="msg" [class.me]="m.sender === 'user'" [class.ai]="m.sender === 'ai'">
+        <div class="bubble">
+          <div class="meta small text-body-secondary">
+            <span>{{ m.sender === 'user' ? ('chat.message.you' | t) : ('chat.message.ai' | t) }}</span>
+            <span> • </span>
+            <span>{{ m.sentAt | date:'HH:mm' }}</span>
+          </div>
+          <div class="content">{{ m.message }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex gap-2 align-items-start">
+      <label class="visually-hidden" for="msgInput">{{ 'chat.session.inputPlaceholder' | t }}</label>
+      <textarea id="msgInput" #msgInput class="form-control" [ngModel]="text()" (ngModelChange)="text.set($event)"
+                [placeholder]="'chat.session.inputPlaceholder' | t" [attr.aria-invalid]="tooLong() ? 'true' : 'false'"
+                [attr.maxlength]="maxLen"
+                [disabled]="sending()"></textarea>
+      <div class="d-flex flex-column align-items-end gap-2">
+        <div class="small" [class.text-danger]="tooLong()">
+          {{ charsLeft() }} / {{ maxLen }}
+        </div>
+        <button type="button" class="btn btn-primary" (click)="send()"
+                [disabled]="sending() || !text().trim() || tooLong()"
+                [attr.aria-label]="('chat.session.send' | t)">
+          {{ 'chat.session.send' | t }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #missingTpl>
+  <ng-container [ngSwitch]="errorStatus()">
+    <div *ngSwitchCase="403" class="alert alert-warning">{{ 'errors.forbidden' | t }}</div>
+    <div *ngSwitchDefault class="alert alert-secondary">{{ 'chat.errors.notFound' | t }}</div>
+  </ng-container>
+</ng-template>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>
+
+<ng-template #loadTpl>
+  <div class="container py-4 text-center">
+    <div class="spinner-border"></div>
+  </div>
+</ng-template>

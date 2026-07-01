@@ -1,0 +1,113 @@
+<div class="container py-3">
+  <h5 class="mb-3">{{ 'admin.userProgress.title' | t }}</h5>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.userProgress.user' | t }}</label>
+          <input type="number" class="form-control"
+                 [ngModel]="filterUserId()"
+                 (ngModelChange)="onUserIdChange($event)"
+                 min="1" step="1" inputmode="numeric"/>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.userProgress.lesson' | t }}</label>
+          <input type="number" class="form-control"
+                 [ngModel]="filterLessonId()"
+                 (ngModelChange)="onLessonIdChange($event)"
+                 min="1" step="1" inputmode="numeric"/>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.userProgress.status' | t }}</label>
+          <select class="form-select" [ngModel]="filterStatus()" (ngModelChange)="onStatusChange($event)">
+            <option value="">{{ 'common.all' | t }}</option>
+            <option value="in_progress">{{ 'admin.enrollments.statuses.in_progress' | t }}</option>
+            <option value="completed">{{ 'admin.enrollments.statuses.completed' | t }}</option>
+          </select>
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button type="button" class="btn btn-light" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.userProgress.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('userId')" style="cursor:pointer">{{ 'admin.userProgress.user' | t }}
+              <span>{{ sortArrow('userId') }}</span></th>
+            <th (click)="toggleSort('lessonId')" style="cursor:pointer">{{ 'admin.userProgress.lesson' | t }}
+              <span>{{ sortArrow('lessonId') }}</span></th>
+            <th (click)="toggleSort('status')" style="cursor:pointer">{{ 'admin.userProgress.status' | t }}
+              <span>{{ sortArrow('status') }}</span></th>
+            <th (click)="toggleSort('completedAt')" style="cursor:pointer">{{ 'admin.userProgress.completedAt' | t }}
+              <span>{{ sortArrow('completedAt') }}</span></th>
+            <th (click)="toggleSort('lastActivityAt')"
+                style="cursor:pointer">{{ 'admin.userProgress.lastActivityAt' | t }}
+              <span>{{ sortArrow('lastActivityAt') }}</span></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let r of pageRows(); trackBy: trackById">
+            <td>{{ r.id }}</td>
+            <td>{{ r.userId }}</td>
+            <td>{{ r.lessonId }}</td>
+            <td>{{ ('admin.enrollments.statuses.' + r.status) | t }}</td>
+            <td>{{ r.completedAt ? (r.completedAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+            <td>{{ r.lastActivityAt ? (r.lastActivityAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

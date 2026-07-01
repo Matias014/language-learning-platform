@@ -1,0 +1,13 @@
+.lang-switcher {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+.lang-switcher button {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+.lang-switcher button.active {
+  text-decoration: underline;
+}

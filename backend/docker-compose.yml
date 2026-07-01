@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-18}
+    container_name: language-school-postgres
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-language_application}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: --encoding=UTF8 --locale=C.UTF-8
+      TZ: ${TZ:-Europe/Warsaw}
+    volumes:
+      - pgdata:/var/lib/postgresql # PG 18 oczekuje montowania pod /var/lib/postgresql
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: [ "CMD-SHELL","pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-language_application} || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  pgdata:

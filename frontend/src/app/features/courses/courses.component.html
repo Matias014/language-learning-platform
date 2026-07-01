@@ -1,0 +1,67 @@
+<div class="container py-4">
+  <h4 class="mb-3">{{ 'coursesList.title' | t }}</h4>
+
+  <ng-container *ngIf="!loading(); else loadingTpl">
+    <div class="row g-3" *ngIf="rows().length; else emptyTpl">
+      <div class="col-md-6 col-lg-4" *ngFor="let c of rows(); trackBy: trackByCourseId">
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <img *ngIf="c.countryIconPath" [src]="c.countryIconPath" alt="" width="28" height="18">
+              <h6 class="mb-0">{{ c.title }}</h6>
+            </div>
+
+            <div class="text-body-secondary small mb-2">
+              {{ 'coursesList.learningLang' | t }}: {{ c.learningLanguageCode }} ·
+              {{ 'coursesList.supportLang' | t }}: {{ c.fromLanguageCode }}
+            </div>
+
+            <p class="flex-grow-1 mb-2" *ngIf="c.description">{{ c.description }}</p>
+
+            <div *ngIf="enrollmentFor(c.id) as en" class="text-body-secondary small mb-2">
+              {{ en.status === 'completed' ? ('coursesList.completed' | t) : ('coursesList.inProgress' | t) }}
+            </div>
+
+            <div *ngIf="progressFor(c.id) as pct" class="mb-2">
+              <div class="progress rounded-0" style="height: 6px">
+                <div class="progress-bar" [style.width.%]="clampPercent(pct)"></div>
+              </div>
+            </div>
+
+            <div class="mt-auto d-flex gap-2">
+              <a
+                class="btn btn-sm btn-outline-primary"
+                [routerLink]="['/courses', c.id]"
+                [attr.aria-label]="('coursesList.details' | t) + ': ' + c.title"
+              >
+                {{ 'coursesList.details' | t }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'coursesList.empty' | t }}</div>
+    </ng-template>
+  </ng-container>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="container py-5 text-center">
+    <div class="spinner-border"></div>
+  </div>
+</ng-template>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

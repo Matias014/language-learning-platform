@@ -1,0 +1,50 @@
+name: language-learning-platform
+
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: language-learning-database
+    environment:
+      POSTGRES_DB: language_application
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - ./backend/docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d language_application"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    
+  backend:
+    container_name: language-learning-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/language_application
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SECURITY_JWT_SECRET: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+      SECURITY_FIELD_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+      ANTHROPIC_API_KEY: ""
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+
+  frontend:
+    container_name: language-learning-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  database_data:

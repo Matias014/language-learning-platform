@@ -1,0 +1,196 @@
+<h5 class="mb-3">{{ 'admin.exercises.title' | t }}</h5>
+
+<div class="row g-2 align-items-end mb-3">
+  <div class="col-md-5">
+    <label class="form-label small">{{ 'admin.lessons.course' | t }}</label>
+    <select
+      class="form-select form-select-sm"
+      [ngModel]="selectedCourseId()"
+      (ngModelChange)="selectedCourseId.set($event); onCourseChange()">
+      <option [ngValue]="null">— {{ 'common.select' | t }} —</option>
+      <option *ngFor="let c of courses()" [ngValue]="c.id">[{{ c.id }}] {{ c.title }}</option>
+    </select>
+  </div>
+
+  <div class="col-md-5">
+    <label class="form-label small">{{ 'lessons.title' | t }}</label>
+    <select
+      class="form-select form-select-sm"
+      [ngModel]="selectedLessonId()"
+      (ngModelChange)="selectedLessonId.set($event); onLessonChange()">
+      <option [ngValue]="null">— {{ 'common.select' | t }} —</option>
+      <option *ngFor="let l of lessons()" [ngValue]="l.id">[{{ l.orderNumber }}] {{ l.title }}</option>
+    </select>
+  </div>
+
+  <div class="col-md-2 d-flex align-items-end" *ngIf="selectedCourse() as sc">
+    <span class="badge bg-light text-body-secondary w-100 text-center">
+      {{ 'admin.courses.level' | t }}: {{ sc.levelCode || '—' }}
+    </span>
+  </div>
+</div>
+
+<div class="card mb-3" *ngIf="selectedLessonId()">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>{{ 'admin.exercises.generator.title' | t }}</span>
+    <span class="badge bg-secondary" *ngIf="selectedCourse() as sc">
+      {{ 'admin.courses.level' | t }}: {{ sc.levelCode || '—' }}
+    </span>
+  </div>
+  <div class="card-body">
+    <div class="row g-2">
+      <div class="col-md-2">
+        <label class="form-label small mb-1">{{ 'admin.exercises.type' | t }}</label>
+        <select class="form-select form-select-sm" [ngModel]="genType()" (ngModelChange)="genType.set($event)">
+          <option *ngFor="let t of types" [ngValue]="t">{{ prettyType(t) }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label small mb-1">{{ 'admin.exercises.difficulty' | t }}</label>
+        <select class="form-select form-select-sm" [ngModel]="genDiff()" (ngModelChange)="genDiff.set($event)">
+          <option *ngFor="let d of difficulties" [ngValue]="d">{{ prettyDifficulty(d) }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label small mb-1">{{ 'admin.exercises.generator.countLabel' | t }}</label>
+        <input type="number" min="1" max="20" class="form-control form-control-sm"
+               [ngModel]="genCount()" (ngModelChange)="genCount.set(+$event)"/>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label small mb-1">{{ 'admin.exercises.generator.xpLabel' | t }}</label>
+        <input type="number" min="0" class="form-control form-control-sm"
+               [ngModel]="genXp()" (ngModelChange)="genXp.set(+$event)"/>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label small mb-1">{{ 'admin.exercises.generator.topicLabel' | t }}</label>
+        <input class="form-control form-control-sm"
+               [ngModel]="genTopic()" (ngModelChange)="genTopic.set(($event ?? '').toString())"
+               placeholder="e.g. Present Simple: daily routines"/>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2 mt-3">
+      <button class="btn btn-sm btn-success"
+              (click)="generateAI()"
+              [disabled]="generating() || !canGenerate()">
+        {{ 'admin.exercises.generator.start' | t }}
+        <span *ngIf="generating()" class="spinner-border spinner-border-sm ms-1"></span>
+      </button>
+
+      <span *ngIf="genOkCount() !== null" class="text-success small">
+        {{ 'admin.exercises.generator.generated' | t:{count: genOkCount()} }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3" *ngIf="exercises().length">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-12 col-sm-6 col-md-3">
+        <select id="exf-type" class="form-select form-select-sm"
+                [ngModel]="filterType()"
+                (ngModelChange)="filterType.set($event || ''); onFilterChange()">
+          <option value="">{{ 'admin.exercises.filterType' | t }}</option>
+          <option *ngFor="let t of types" [value]="t">{{ prettyType(t) }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <select id="exf-diff" class="form-select form-select-sm"
+                [ngModel]="filterDifficulty()"
+                (ngModelChange)="filterDifficulty.set($event || ''); onFilterChange()">
+          <option value="">{{ 'admin.exercises.filterDifficulty' | t }}</option>
+          <option *ngFor="let d of difficulties" [value]="d">{{ prettyDifficulty(d) }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <input id="exf-minxp" type="number" min="0" class="form-control form-control-sm"
+               [ngModel]="filterMinXp()"
+               (ngModelChange)="onMinXpChange($event)"
+               [placeholder]="'admin.exercises.filterMinXp' | t"/>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <input id="exf-q" class="form-control form-control-sm"
+               [ngModel]="filterQuery()"
+               (ngModelChange)="filterQuery.set(($event ?? '').toString()); onFilterChange()"
+               [placeholder]="'admin.exercises.filterQuery' | t"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2" *ngIf="exercises().length">
+  <span class="text-body-secondary">
+    {{ 'common.pagination' | t }}: {{ page() + 1 }} / {{ totalPages() || 1 }}
+    • {{ totalElements() }} {{ 'common.total' | t }}
+  </span>
+  <div class="d-flex align-items-center gap-2">
+    <label class="form-label m-0 small">{{ 'common.pageSize' | t }}</label>
+    <select class="form-select form-select-sm" style="width:auto" [value]="size()"
+            (change)="changeSize(+$any($event.target).value)">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="20">20</option>
+      <option [value]="50">50</option>
+    </select>
+    <div class="btn-group">
+      <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+      <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+    </div>
+  </div>
+</div>
+
+<div class="table-responsive" *ngIf="pageRows().length; else emptyTpl">
+  <table class="table table-sm align-middle">
+    <thead>
+    <tr>
+      <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+      <th (click)="toggleSort('type')" style="cursor:pointer">{{ 'admin.exercises.type' | t }}
+        <span>{{ sortArrow('type') }}</span></th>
+      <th>{{ 'admin.exercises.question' | t }}</th>
+      <th (click)="toggleSort('xp')" style="cursor:pointer">{{ 'admin.exercises.xp' | t }}
+        <span>{{ sortArrow('xp') }}</span></th>
+      <th (click)="toggleSort('difficulty')" style="cursor:pointer">{{ 'admin.exercises.difficulty' | t }}
+        <span>{{ sortArrow('difficulty') }}</span></th>
+      <th (click)="toggleSort('orderNumber')" style="cursor:pointer">{{ 'admin.exercises.order' | t }}
+        <span>{{ sortArrow('orderNumber') }}</span></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let e of pageRows(); trackBy: trackById">
+      <td>{{ e.id }}</td>
+      <td>{{ prettyType(e.type) }}</td>
+      <td class="text-truncate" style="max-width: 420px">{{ e.question }}</td>
+      <td>{{ e.xp }}</td>
+      <td>{{ prettyDifficulty(e.difficulty) }}</td>
+      <td>{{ e.orderNumber }}</td>
+      <td class="text-end">
+        <button class="btn btn-outline-secondary btn-sm" disabled>{{ 'common.edit' | t }}</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #emptyTpl>
+  <div class="text-center fw-bold text-body-secondary py-4">
+    {{ 'admin.exercises.empty' | t }}
+  </div>
+</ng-template>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

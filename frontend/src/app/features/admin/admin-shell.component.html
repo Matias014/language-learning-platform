@@ -1,0 +1,112 @@
+<div class="container py-4">
+  <div class="row g-3">
+    <aside class="col-lg-3">
+      <div class="list-group small sticky-top">
+        <a
+          routerLink="/admin/achievements"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.achievements" | t }}</a
+        >
+        <a
+          routerLink="/admin/chat-messages"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.chatMessages" | t }}</a
+        >
+        <a
+          routerLink="/admin/chat-sessions"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.chatSessions" | t }}</a
+        >
+        <a
+          routerLink="/admin/course-enrollments"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.courseEnrollments" | t }}</a>
+        <a
+          routerLink="/admin/courses"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.courses" | t }}</a
+        >
+        <a
+          routerLink="/admin/exercise-attempts"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.exerciseAttempts" | t }}</a
+        >
+        <a
+          routerLink="/admin/exercise-awards"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.exerciseAwards" | t }}</a
+        >
+        <a
+          routerLink="/admin/exercises"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.exercises" | t }}</a
+        >
+        <a
+          routerLink="/admin/languages"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.languages" | t }}</a
+        >
+        <a
+          routerLink="/admin/lessons"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.lessons" | t }}</a
+        >
+        <a
+          routerLink="/admin/levels"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.levels" | t }}</a
+        >
+        <a
+          routerLink="/admin/llm-logs"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.llmLogs" | t }}</a
+        >
+        <a
+          routerLink="/admin/proficiency-levels"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.proficiencyLevels" | t }}</a
+        >
+        <a
+          routerLink="/admin/reports"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.reports" | t }}</a
+        >
+        <a
+          routerLink="/admin/user-achievements"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.userAchievements" | t }}</a
+        >
+        <a
+          routerLink="/admin/user-lesson-progress"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.userLessonProgress" | t }}</a
+        >
+        <a
+          routerLink="/admin/users"
+          routerLinkActive="active"
+          class="list-group-item list-group-item-action"
+        >{{ "admin.nav.users" | t }}</a
+        >
+      </div>
+    </aside>
+    <main class="col-lg-9">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

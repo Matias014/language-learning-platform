@@ -1,0 +1,926 @@
+{
+  "common": {
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "goHome": "Go home",
+    "select": "Select",
+    "name": "Name",
+    "title": "Title",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "reload": "Reload",
+    "close": "Close",
+    "actions": "Actions",
+    "goDashboard": "Go to dashboard",
+    "loadFailed": "Failed to load data.",
+    "saveFailed": "Failed to save.",
+    "deleteFailed": "Failed to delete.",
+    "clearFilters": "Clear filters",
+    "id": "ID",
+    "search": "Search",
+    "clear": "Clear",
+    "pageSize": "Page size",
+    "pagination": "Page",
+    "total": "total",
+    "all": "all",
+    "areYouSure": "Are you sure?"
+  },
+  "roles": {
+    "user": "User",
+    "admin": "Admin"
+  },
+  "exercise": {
+    "type": {
+      "quiz": "Quiz",
+      "fill_in": "Fill in",
+      "writing": "Writing"
+    }
+  },
+  "difficulty": {
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard"
+  },
+  "validation": {
+    "required": "Field is required.",
+    "email": "Invalid email address.",
+    "minLength": "Must be at least {min} characters.",
+    "maxLength": "Must be at most {max} characters.",
+    "min": "Value cannot be less than {min}.",
+    "max": "Value cannot be greater than {max}.",
+    "pattern": "Value does not match the required format.",
+    "number": "Please enter a number.",
+    "integer": "Please enter an integer."
+  },
+  "errors": {
+    "notFound": "Page not found.",
+    "unauthorized": "Unauthorized.",
+    "forbidden": "Forbidden.",
+    "conflict": "Data conflict.",
+    "badRequest": "Bad request.",
+    "serviceUnavailable": "Service temporarily unavailable.",
+    "default": "Something went wrong."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "reviews": "Reviews",
+    "chat": "Chat",
+    "admin": "Admin",
+    "login": "Log in",
+    "register": "Register",
+    "profile": "My profile",
+    "logout": "Log out"
+  },
+  "lang": {
+    "switch": "Language",
+    "en": "English",
+    "pl": "Polish",
+    "enShort": "EN",
+    "plShort": "PL"
+  },
+  "auth": {
+    "common": {
+      "login": "Login",
+      "email": "E-mail",
+      "password": "Password",
+      "newPassword": "New password",
+      "backToLogin": "Back to login",
+      "goToLogin": "Go to login"
+    },
+    "login": {
+      "title": "Log in",
+      "remember": "Remember me",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "registerCta": "Register",
+      "loginOrEmail": "Login or email",
+      "errors": {
+        "invalid": "Invalid login/email or password.",
+        "generic": "Couldn't sign you in.",
+        "throttle": "Too many attempts. Try again later.",
+        "throttleIn": "Too many attempts. Try again in {seconds}s."
+      }
+    },
+    "register": {
+      "title": "Register",
+      "name": "Name",
+      "surname": "Surname",
+      "confirmPassword": "Confirm password",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginCta": "Log in",
+      "validation": {
+        "loginPattern": "Login may contain letters, digits, dot, underscore, or hyphen.",
+        "loginMin": "Login must be at least 3 characters.",
+        "passwordMin": "Password must be at least 8 characters.",
+        "passwordMismatch": "Passwords do not match."
+      },
+      "errors": {
+        "loginTaken": "This login is already taken.",
+        "emailTaken": "This e-mail is already taken.",
+        "conflict": "Login or e-mail is already taken.",
+        "generic": "Couldn't create the account."
+      }
+    }
+  },
+  "profile": {
+    "adminBadge": "admin",
+    "actions": {
+      "resetPassword": "Reset password via email",
+      "export": "Export data",
+      "delete": "Delete account",
+      "edit": "Edit profile",
+      "save": "Save",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "changePassword": {
+      "sectionTitle": "Change password"
+    },
+    "labels": {
+      "login": "Login",
+      "name": "First name",
+      "surname": "Last name",
+      "email": "Email",
+      "avatar": "Avatar",
+      "xpLevel": "Level",
+      "totalXp": "Total XP",
+      "toNext": "XP to next level",
+      "achievements": "Achievements",
+      "noAchievements": "No achievements yet",
+      "avatarAlt": "Avatar of {username}",
+      "avatarFile": "Avatar image",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password"
+    },
+    "delete": {
+      "title": "Delete account",
+      "text": "This action cannot be undone. Your data will be anonymized."
+    },
+    "changeAuth": {
+      "titleBoth": "Confirm login and email change",
+      "hintBoth": "To change your login and email, enter your current password."
+    },
+    "changeLogin": {
+      "title": "Confirm login change",
+      "hint": "To change your login, enter your current password.",
+      "currentPassword": "Current password"
+    },
+    "changeEmail": {
+      "title": "Confirm email change",
+      "hint": "To change your email, enter your current password.",
+      "currentPassword": "Current password"
+    },
+    "alerts": {
+      "saved": "Changes saved.",
+      "noChanges": "No changes to save.",
+      "saveFailed": "Failed to save changes.",
+      "deletedError": "Failed to delete the account.",
+      "exportOk": "Data exported.",
+      "exportFail": "Failed to export data.",
+      "missingEmail": "Missing email address.",
+      "throttle": "Too many attempts. Try again later.",
+      "resetSent": "We sent a reset link to the provided email if the account exists.",
+      "wrongPassword": "Incorrect password.",
+      "loginTaken": "Login is already taken.",
+      "providePassword": "Provide your current password to confirm.",
+      "emailTaken": "E-mail is already taken.",
+      "passwordLength": "Password must be at least 8 characters.",
+      "passwordMismatch": "Passwords do not match."
+    }
+  },
+  "courses": {
+    "title": "Courses",
+    "new": "New course",
+    "language": "Language",
+    "sourceLanguage": "Support language",
+    "level": "Level",
+    "titleField": "Title",
+    "description": "Description"
+  },
+  "lessons": {
+    "title": "Lesson",
+    "previous": "Previous",
+    "next": "Next",
+    "hint": "Hint",
+    "submit": "Submit",
+    "history": "Attempt history",
+    "correct": "Correct!",
+    "tryAgain": "Try again",
+    "hintsTitle": "Hints",
+    "awardedXp": "+{xp} XP",
+    "hintEmpty": "Showing a starter hint.",
+    "timelineTotal": "Total: {count}",
+    "attemptNumber": "Attempt #{no}",
+    "correctShort": "OK",
+    "incorrectShort": "Wrong",
+    "scoreLabel": "Score: {score}%",
+    "feedbackLabel": "Feedback:",
+    "answerLabel": "Answer:",
+    "noAttempts": "No attempts for this exercise.",
+    "completedNoXp": "Completed (no XP)",
+    "xp": "XP: {xp}",
+    "progressAria": "lesson progress",
+    "summaryTitle": "{title} — summary",
+    "summary": {
+      "exercises": "Exercises",
+      "totalAttempts": "Attempts total",
+      "hints": "Hints",
+      "time": "Time",
+      "totalXp": "XP {xp}",
+      "avgAttemptsPerExercise": "Avg attempts/ex."
+    }
+  },
+  "srs": {
+    "title": "Reviews (SRS)",
+    "buttons": {
+      "dashboard": "Dashboard",
+      "srs": "SRS",
+      "openLesson": "Open lesson"
+    },
+    "info": {
+      "completedFromActive": "These are completed tasks eligible for SRS reviews from your active courses."
+    },
+    "sections": {
+      "dueToday": "Due today",
+      "upcoming": "Upcoming"
+    },
+    "labels": {
+      "lesson": "Lesson",
+      "stage": "stage {now}",
+      "dueDate": "Due: {date}",
+      "total": "Total: {count}"
+    },
+    "empty": {
+      "today": "No reviews due today."
+    },
+    "errors": {
+      "loadFailed": "Failed to load SRS data."
+    }
+  },
+  "stats": {
+    "title": "Statistics",
+    "export": "Export PDF",
+    "range": {
+      "7": "7 days",
+      "30": "30 days",
+      "90": "90 days",
+      "aria": "Chart range"
+    },
+    "labels": {
+      "lessonsCompleted": "Lessons completed",
+      "awards": "Awards",
+      "totalXp": "Total XP",
+      "avgPerDay": "Avg/day",
+      "table": "XP table",
+      "noData": "No data."
+    },
+    "user": {
+      "login": "Login",
+      "xp": "XP"
+    },
+    "breakdown": {
+      "type": "XP by exercise type",
+      "difficulty": "XP by difficulty"
+    },
+    "srs": {
+      "weekTitle": "SRS — this week",
+      "today": "Today",
+      "totalWeek": "In week",
+      "next7": "In the next 7 days"
+    },
+    "eff": {
+      "title": "Answer accuracy",
+      "global": "Global accuracy",
+      "avgOpenScore": "Avg score (open tasks)",
+      "byType": "Accuracy by type",
+      "byDifficulty": "Accuracy by difficulty"
+    },
+    "activity": {
+      "title": "Activity",
+      "streak": "Streak (days)",
+      "activeDays": "Active days",
+      "last": "Last activity"
+    }
+  },
+  "admin": {
+    "nav": {
+      "users": "Users",
+      "courses": "Courses",
+      "lessons": "Lessons",
+      "exercises": "Exercises",
+      "languages": "Languages",
+      "chatSessions": "Chat sessions",
+      "chatMessages": "Chat messages",
+      "proficiencyLevels": "Proficiency levels",
+      "proficiency": "Proficiency levels",
+      "levels": "Levels",
+      "achievements": "Achievements",
+      "courseEnrollments": "Course enrollments",
+      "exerciseAttempts": "Exercise attempts",
+      "exerciseAwards": "Exercise awards",
+      "userLessonProgress": "User lesson progress",
+      "llmLogs": "LLM logs",
+      "userAchievements": "User achievements",
+      "reports": "Reports/Export"
+    },
+    "chatSessions": {
+      "title": "Chat sessions",
+      "titleCol": "Title",
+      "user": "User",
+      "course": "Course",
+      "lesson": "Lesson",
+      "startedAt": "Start",
+      "endedAt": "End",
+      "userId": "User ID",
+      "courseId": "Course ID",
+      "lessonId": "Lesson ID",
+      "viewMessages": "View messages",
+      "confirmDelete": "Delete session? This will also remove all its messages and related logs.",
+      "empty": "No sessions",
+      "errors": {
+        "load": "Failed to load chat sessions.",
+        "delete": "Failed to delete the session."
+      }
+    },
+    "chatMessages": {
+      "title": "Chat messages",
+      "sessionId": "Session ID",
+      "sender": "Sender",
+      "message": "Message",
+      "sentAt": "Sent at",
+      "confirmDelete": "Delete message?",
+      "empty": "No messages",
+      "errors": {
+        "load": "Failed to load chat messages.",
+        "delete": "Failed to delete the message."
+      }
+    },
+    "users": {
+      "title": "Users",
+      "role": "Role",
+      "login": "Login",
+      "email": "E-mail",
+      "roleInfo": "Role is controlled by the server and cannot be edited here.",
+      "confirmDelete": "Delete user?",
+      "addUser": "Add user",
+      "passwordInfo": "Optional. If provided, it will set a new password for the user.",
+      "errors": {
+        "load": "Failed to load users.",
+        "create": "Failed to create user.",
+        "update": "Failed to update user.",
+        "delete": "Failed to delete user."
+      },
+      "msg": {
+        "loginTaken": "This login is already taken.",
+        "emailTaken": "This email address is already in use.",
+        "invalidCredentials": "Invalid credentials.",
+        "unauthenticated": "You must be signed in.",
+        "forbidden": "You don't have permission to perform this action.",
+        "notFound": "User not found."
+      },
+      "alerts": {
+        "created": "User created.",
+        "updated": "User updated.",
+        "deleted": "User deleted."
+      }
+    },
+    "courses": {
+      "id": "ID",
+      "confirmDelete": "Delete course?",
+      "empty": "No courses.",
+      "title": "Courses",
+      "editCourse": "Edit course",
+      "createCourse": "Create course",
+      "language": "Target language",
+      "source": "Support language",
+      "titleCol": "Title",
+      "level": "Level",
+      "description": "Description",
+      "errors": {
+        "load": "Failed to load courses.",
+        "save": "Failed to save course.",
+        "delete": "Failed to delete course."
+      },
+      "alerts": {
+        "created": "Course created.",
+        "updated": "Course updated.",
+        "deleted": "Course deleted."
+      }
+    },
+    "lessons": {
+      "title": "Lessons",
+      "course": "Course",
+      "id": "ID",
+      "name": "Title",
+      "order": "Order",
+      "empty": "No lessons for the selected course.",
+      "confirmDelete": "Delete lesson? This may remove related data.",
+      "description": "Description",
+      "filtersHelp": "Filter by ID, title or order.",
+      "alerts": {
+        "saved": "Lesson saved.",
+        "deleted": "Lesson deleted."
+      }
+    },
+    "exercises": {
+      "title": "Exercises",
+      "type": "Type",
+      "question": "Question",
+      "order": "Order",
+      "filterType": "Filter by type",
+      "filterDifficulty": "Filter by difficulty",
+      "filterMinXp": "Min XP",
+      "filterQuery": "Search in question",
+      "xp": "XP",
+      "difficulty": "Difficulty",
+      "edit": "Edit",
+      "empty": "No exercises for the selected lesson.",
+      "generator": {
+        "title": "Exercise generator (AI)",
+        "forLesson": "For lesson #{id}",
+        "topicLabel": "Topic (1–100 chars)",
+        "countLabel": "How many",
+        "xpLabel": "XP",
+        "start": "Generate",
+        "generated": "Generated {count} ex."
+      },
+      "errors": {
+        "disabled404": "AI feature is disabled (404).",
+        "unavailable503": "AI service temporarily unavailable (503).",
+        "generic": "Could not generate exercises.",
+        "load": "Failed to load exercises data."
+      }
+    },
+    "languages": {
+      "title": "Languages",
+      "code": "Code",
+      "name": "Name",
+      "confirmDelete": "Delete language?",
+      "empty": "No languages.",
+      "errors": {
+        "load": "Failed to load languages.",
+        "create": "Failed to create language.",
+        "update": "Failed to update language.",
+        "delete": "Failed to delete language."
+      },
+      "alerts": {
+        "created": "Language created.",
+        "updated": "Language updated.",
+        "deleted": "Language deleted."
+      }
+    },
+    "proficiencyLevels": {
+      "title": "Proficiency levels",
+      "code": "Code",
+      "order": "Order",
+      "codePlaceholder": "e.g. A2, B1, C1",
+      "orderPlaceholder": "Order (≥ 1)",
+      "confirmDelete": "Delete proficiency level?",
+      "empty": "No entries.",
+      "errors": {
+        "load": "Failed to load proficiency levels.",
+        "create": "Failed to create proficiency level.",
+        "update": "Failed to update proficiency level.",
+        "delete": "Failed to delete proficiency level."
+      },
+      "alerts": {
+        "created": "Proficiency level created.",
+        "updated": "Proficiency level updated.",
+        "deleted": "Proficiency level deleted."
+      }
+    },
+    "levels": {
+      "title": "Levels",
+      "level": "Level",
+      "requiredXp": "Required XP",
+      "empty": "No levels to display",
+      "confirmDelete": "Are you sure you want to delete this level?",
+      "alerts": {
+        "created": "Level created",
+        "updated": "Level updated",
+        "deleted": "Level deleted"
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "description": "Description",
+      "descriptionPlaceholder": "Short badge description…",
+      "icon": "Icon",
+      "iconPlaceholder": "Icon URL (optional)",
+      "requiredXp": "Required XP",
+      "confirmDelete": "Delete achievement?",
+      "titlePlaceholder": "Badge title",
+      "errors": {
+        "load": "Failed to load achievements."
+      },
+      "empty": "No achievements."
+    },
+    "enrollments": {
+      "title": "Enrollments",
+      "user": "User",
+      "course": "Course",
+      "status": "Status",
+      "currentLesson": "Current lesson",
+      "lastActivity": "Last activity",
+      "filterUser": "Filter by user",
+      "filterCourse": "Filter by course",
+      "filterStatus": "Status",
+      "confirmDelete": "Delete enrollment?",
+      "statuses": {
+        "in_progress": "In progress",
+        "completed": "Completed"
+      },
+      "startedAt": "Started at",
+      "completedAt": "Completed at",
+      "empty": "No enrollments.",
+      "errors": {
+        "load": "Failed to load enrollments.",
+        "update": "Failed to update enrollment.",
+        "delete": "Failed to delete enrollment."
+      }
+    },
+    "userAchievements": {
+      "title": "User achievements",
+      "user": "User",
+      "achievement": "Achievement",
+      "earnedAt": "Earned at",
+      "filterUser": "Filter by user (ID)",
+      "filterAchievement": "Filter by achievement (ID)",
+      "confirmDelete": "Delete this user achievement?",
+      "empty": "No entries.",
+      "errors": {
+        "load": "Failed to load user achievements.",
+        "create": "Failed to add user achievement.",
+        "update": "Failed to update user achievement.",
+        "delete": "Failed to delete user achievement."
+      },
+      "alerts": {
+        "created": "User achievement added.",
+        "updated": "User achievement updated.",
+        "deleted": "User achievement deleted."
+      }
+    },
+    "attempts": {
+      "title": "Attempts",
+      "user": "User ID",
+      "exercise": "Exercise ID",
+      "attemptNo": "Attempt #",
+      "correct": "Correct",
+      "score": "Score",
+      "submittedAt": "Submitted at",
+      "duration": "Duration [s]",
+      "answer": "Answer",
+      "feedback": "Feedback",
+      "filtersHelp": "Provide Exercise ID to list attempts. Optionally narrow by User ID.",
+      "confirmDelete": "Delete attempt?",
+      "filterCorrect": "Correctness",
+      "onlyCorrect": "Only correct",
+      "onlyIncorrect": "Only incorrect"
+    },
+    "awards": {
+      "title": "Awards",
+      "user": "User",
+      "exercise": "Exercise",
+      "attempt": "Attempt ID",
+      "xp": "XP",
+      "createdAt": "Created at",
+      "confirmDelete": "Delete award?",
+      "filtersHelp": "Provide user ID. Optionally narrow by attempt ID.",
+      "empty": "No awards.",
+      "errors": {
+        "load": "Failed to load awards."
+      }
+    },
+    "userProgress": {
+      "title": "User progress",
+      "user": "User",
+      "lesson": "Lesson",
+      "status": "Status",
+      "completedExercises": "Completed exercises",
+      "lastActivityAt": "Last activity",
+      "empty": "No entries.",
+      "completedAt": "Completed at",
+      "errors": {
+        "load": "Failed to load user progress."
+      }
+    },
+    "llmLogs": {
+      "title": "LLM logs",
+      "userId": "User ID",
+      "lessonId": "Lesson ID",
+      "attemptId": "Attempt ID",
+      "sessionId": "Session ID",
+      "typeLabel": "Type",
+      "typePlaceholder": "All types",
+      "type": {
+        "chat": "Chat",
+        "grading": "Grading",
+        "generation": "Generation",
+        "hint": "Hint"
+      },
+      "model": "Model",
+      "statusLabel": "Status",
+      "status": {
+        "ok": "OK",
+        "timeout": "Timeout",
+        "rate_limited": "Rate limited",
+        "quota_exceeded": "Quota exceeded",
+        "safety_block": "Safety block",
+        "invalid_request": "Invalid request",
+        "server_error": "Server error"
+      },
+      "tokensIn": "Tokens in",
+      "tokensOut": "Tokens out",
+      "latencyMs": "Latency [ms]",
+      "preview": "Prompt preview",
+      "createdAt": "Created at",
+      "view": "View",
+      "details": "Log details",
+      "prompt": "Prompt",
+      "response": "Response",
+      "empty": "No logs.",
+      "errors": {
+        "load": "Failed to load logs."
+      }
+    },
+    "resetTokens": {
+      "title": "Reset tokens",
+      "user": "User",
+      "token": "Token",
+      "expiresAt": "Expires at",
+      "usedAt": "Used at",
+      "createdAt": "Created at"
+    },
+    "reports": {
+      "title": "Admin reports",
+      "llm": {
+        "title": "LLM statistics",
+        "byType": "Calls by type",
+        "byStatus": "Calls by status",
+        "calls": "Calls",
+        "tokensIn": "Tokens in",
+        "tokensOut": "Tokens out",
+        "latency": "Avg latency [ms]"
+      },
+      "hardest": {
+        "title": "Hardest exercises",
+        "exerciseId": "Exercise ID",
+        "avgAccuracy": "Avg accuracy",
+        "avgTime": "Avg time",
+        "limit": "Limit"
+      }
+    }
+  },
+  "chat": {
+    "new": {
+      "title": "New conversation",
+      "titlePlaceholder": "Conversation title",
+      "languageLabel": "Language",
+      "start": "Start",
+      "browseCourses": "Browse courses"
+    },
+    "alerts": {
+      "titleSaved": "Title updated.",
+      "sessionDeleted": "Session deleted.",
+      "sessionCreated": "Session created.",
+      "languageSaved": "Conversation language updated."
+    },
+    "session": {
+      "untitled": "Conversation",
+      "language": "Language",
+      "new": "New conversation",
+      "inputPlaceholder": "Type a message…",
+      "send": "Send",
+      "closed": "This session has been closed.",
+      "rename": "Rename",
+      "state": {
+        "open": "Open",
+        "closed": "Closed"
+      }
+    },
+    "context": {
+      "course": "Course",
+      "lesson": "Lesson"
+    },
+    "list": {
+      "title": "Conversation mode",
+      "home": "Home",
+      "titlePlaceholder": "Session title",
+      "new": "New session",
+      "lastActivity": "Last activity",
+      "open": "Open",
+      "delete": "Delete",
+      "empty": "No sessions. Create a new one above.",
+      "defaultTitle": "New session"
+    },
+    "message": {
+      "you": "You",
+      "ai": "AI"
+    },
+    "errors": {
+      "fetchSession": "Failed to load session.",
+      "fetchSessions": "Failed to load sessions.",
+      "fetchMessages": "Failed to load messages.",
+      "createSession": "Failed to create session.",
+      "deleteSession": "Failed to delete session.",
+      "send": "Failed to send message.",
+      "notFound": "Session does not exist.",
+      "tooLong": "Message is too long (max {max} characters).",
+      "closed": "This session has been closed.",
+      "aiDisabled": "AI chat is disabled in this environment.",
+      "updateSession": "Could not update the session."
+    },
+    "lang": {
+      "auto": "auto",
+      "en": "en",
+      "pl": "pl"
+    },
+    "start": "Start chat"
+  },
+  "server": {
+    "LOGIN_TAKEN": "This login is already taken.",
+    "EMAIL_TAKEN": "This e-mail is already taken.",
+    "INVALID_CREDENTIALS": "Invalid login/email or password.",
+    "CODE_TAKEN": "Such code already exists.",
+    "LEVEL_TAKEN": "Such level already exists.",
+    "LEVEL_POSITIVE": "Level must be positive.",
+    "REQUIRED_XP_NON_NEGATIVE": "Required XP cannot be negative.",
+    "LEVEL_REQUIRED": "Level is required.",
+    "NEGATIVE_XP": "XP cannot be negative.",
+    "QUESTION_REQUIRED": "Question is required.",
+    "INVALID_ANSWER_SCHEMA_ACCEPTABLE": "Invalid answer schema (acceptable).",
+    "CANNOT_SET_CORRECT_OPTION_FOR_NON_QUIZ": "Correct option allowed only for quiz type.",
+    "CORRECT_OPTION_NOT_BELONG_TO_EXERCISE": "Selected option does not belong to this exercise.",
+    "CANNOT_SET_DELETED_OPTION": "Cannot set a deleted option as correct.",
+    "NOT_A_QUIZ_EXERCISE": "This exercise is not a quiz.",
+    "CONTENT_REQUIRED": "Content is required.",
+    "ORDER_NUMBER_MIN_1": "Order number must be ≥ 1.",
+    "ORDER_NUMBER_TAKEN": "This order number already exists.",
+    "CHOSEN_OPTION_REQUIRED_FOR_QUIZ": "You must choose an answer for a quiz.",
+    "OPTION_NOT_ALLOWED_FOR_NON_QUIZ": "Option is not allowed for this type.",
+    "ANSWER_REQUIRED_FOR_NON_QUIZ": "Answer is required.",
+    "CONCURRENT_ATTEMPT": "Concurrent attempt detected. Try again.",
+    "ALREADY_ENROLLED": "User is already enrolled in this course.",
+    "ALREADY_EXISTS": "Such entry already exists.",
+    "LESSON_NOT_IN_COURSE": "This lesson does not belong to the given course.",
+    "AWARD_ALREADY_EXISTS_FOR_USER_EXERCISE": "User already has an award for this exercise.",
+    "AWARD_ALREADY_EXISTS_FOR_ATTEMPT": "Award for this attempt already exists.",
+    "ATTEMPT_USER_MISMATCH": "Attempt does not belong to this user.",
+    "ATTEMPT_EXERCISE_MISMATCH": "Attempt does not match this exercise.",
+    "ATTEMPT_NOT_MARKED_CORRECT": "Attempt is not marked as correct.",
+    "TITLE_TAKEN": "Title is already taken.",
+    "TITLE_REQUIRED": "Title is required.",
+    "CHAT_SESSION_CLOSED": "This chat session has been closed.",
+    "UNAUTHORIZED": "You must be logged in.",
+    "FORBIDDEN": "Forbidden.",
+    "TOO_MANY_REQUESTS": "Too many requests.",
+    "AVATAR_INVALID_FORMAT": "Invalid image format.",
+    "AVATAR_UNSUPPORTED_TYPE": "Unsupported image type.",
+    "AVATAR_TOO_LARGE": "Image is too large.",
+    "AVATAR_DIMENSIONS_TOO_SMALL": "Image dimensions are too small.",
+    "AVATAR_DIMENSIONS_TOO_LARGE": "Image dimensions are too large.",
+    "AVATAR_UPLOAD_INVALID": "Could not upload the avatar.",
+    "VALIDATION_FAILED": "Validation failed.",
+    "BAD_REQUEST": "Bad request.",
+    "CONFLICT": "Data conflict.",
+    "NOT_ENROLLED": "You are not enrolled in this course.",
+    "ALREADY_EARNED": "This achievement is already earned.",
+    "CODE_REQUIRED": "Code is required.",
+    "AI_DISABLED": "AI feature is disabled.",
+    "AI_CHAT_DISABLED": "AI chat is disabled.",
+    "AI_GRADING_DISABLED": "AI grading is disabled.",
+    "AI_EXERCISES_DISABLED": "AI exercise generator is disabled.",
+    "INVALID_REFRESH_TOKEN": "Invalid refresh token.",
+    "TYPE_REQUIRED": "Type is required.",
+    "DIFFICULTY_REQUIRED": "Difficulty is required.",
+    "ORDER_NUMBER_REQUIRED": "Order number is required.",
+    "PASSING_SCORE_NOT_ALLOWED": "Passing score is not allowed for this type.",
+    "MESSAGE_REQUIRED": "Message is required.",
+    "LOGIN_EMAIL_CONFLICT": "Login or e-mail is already taken.",
+    "AVATAR_EMPTY": "No file uploaded.",
+    "NOT_FOUND": "Not found.",
+    "INVALID_DAYS": "Invalid number of days"
+  },
+  "dashboard": {
+    "hello": "Hi",
+    "level": "Level",
+    "streak": "Streak",
+    "continue": "Continue learning",
+    "tiles": {
+      "reviews": {
+        "title": "Reviews due today",
+        "hint": "Number of items whose due date is today (counted at midnight).",
+        "help": "Click to start",
+        "cta": "Go to reviews"
+      },
+      "chat": {
+        "title": "Conversation",
+        "desc": "Practice fluency with chat",
+        "cta": "Open chat"
+      },
+      "learn": {
+        "title": "Learning",
+        "desc": "Resume where you left off",
+        "cta": "Resume"
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "empty": "No new badges."
+    },
+    "recommendation": {
+      "title": "Recommended course",
+      "cta": "View",
+      "empty": "No recommendation right now",
+      "score": "Match score: {score}"
+    },
+    "courses": {
+      "title": "Your courses",
+      "seeAll": "See all",
+      "resume": "Resume",
+      "empty": "You have no active courses yet.",
+      "browse": "Browse courses"
+    },
+    "xp7d": {
+      "title": "XP – last 7 days",
+      "empty": "No data."
+    },
+    "errors": {
+      "fetch": "Could not load data."
+    }
+  },
+  "coursesList": {
+    "title": "Courses",
+    "details": "Details",
+    "empty": "No courses.",
+    "errorFetch": "Failed to load courses.",
+    "progress": "Progress",
+    "learningLang": "Learning language",
+    "supportLang": "Support language",
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "errorFetchMy": "Failed to load your course data."
+  },
+  "courseDetail": {
+    "back": "Courses",
+    "language": "Language",
+    "level": "Level",
+    "loginToEnroll": "Log in to enroll",
+    "enroll": "Enroll",
+    "unenroll": "Unenroll",
+    "enrollSuccess": "Enrolled to the course.",
+    "unenrollSuccess": "Unenrolled from the course.",
+    "noDescription": "No course description.",
+    "lessons": "Lessons",
+    "openLesson": "Open lesson",
+    "emptyLessons": "No lessons in this course.",
+    "notFound": "Course not found.",
+    "enrollError": "Could not enroll to the course.",
+    "unenrollError": "Could not unenroll from the course.",
+    "enrollRequired": "Enroll to open lessons in this course.",
+    "learningLanguage": "Learning language",
+    "supportLanguage": "Support language"
+  },
+  "toast": {
+    "levelUp": "You reached level {level}",
+    "achievementUnlocked": "Achievement unlocked"
+  },
+  "home": {
+    "title": "Learn languages with AI",
+    "subtitle": "Interactive courses, smart hints and conversations with a language model.",
+    "ctaStart": "Get started",
+    "ctaDashboard": "Go to dashboard",
+    "links": {
+      "browseCourses": "Browse courses",
+      "chatMode": "Conversation mode",
+      "stats": "View stats"
+    },
+    "badge": {
+      "new": "New"
+    },
+    "featureTitle": "AI answer grading",
+    "featureBody": "Get instant hints, corrections and short examples of correct answers.",
+    "illustrationAlt": "AI illustration",
+    "metrics": {
+      "courses": {
+        "title": "Courses",
+        "subtitle": "Exercises & lessons"
+      },
+      "hints": {
+        "title": "Hints",
+        "subtitle": "In real time"
+      },
+      "chat": {
+        "title": "Conversations",
+        "subtitle": "Chat with AI"
+      }
+    }
+  }
+}

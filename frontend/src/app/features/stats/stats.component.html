@@ -1,0 +1,245 @@
+<div class="container py-4" *ngIf="!loading(); else loadTpl" id="stats-root">
+  <div class="d-flex align-items-center mb-3">
+    <div class="d-flex align-items-center gap-3">
+      <img [src]="me()?.avatarPath || 'assets/avatar.svg'" class="rounded-circle obj-cover" width="60" height="60"
+           alt="avatar"/>
+      <div>
+        <div class="fw-semibold">{{ me()?.name || '—' }} {{ me()?.surname || '' }}</div>
+        <div class="small text-body-secondary">
+          {{ 'profile.labels.login' | t }}: {{ me()?.login }} • {{ 'stats.user.xp' | t }}: {{ me()?.totalXp ?? 0 }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div [ngClass]="{ 'col-lg-6': rangeDays() === 7, 'col-lg-12': rangeDays() !== 7 }">
+      <div class="card h-100">
+        <div class="card-body stats-body">
+          <div class="stats-header mb-2">
+            <div class="fw-semibold">{{ 'stats.title' | t }} – XP</div>
+            <div class="btn-group btn-group-sm" role="tablist" [attr.aria-label]="'stats.range.aria' | t">
+              <button class="btn"
+                      [class.btn-primary]="rangeDays() === 7"
+                      [class.btn-outline-primary]="rangeDays() !== 7"
+                      [attr.aria-pressed]="rangeDays() === 7"
+                      (click)="changeRange(7)">
+                {{ 'stats.range.7' | t }}
+              </button>
+              <button class="btn"
+                      [class.btn-primary]="rangeDays() === 30"
+                      [class.btn-outline-primary]="rangeDays() !== 30"
+                      [attr.aria-pressed]="rangeDays() === 30"
+                      (click)="changeRange(30)">
+                {{ 'stats.range.30' | t }}
+              </button>
+              <button class="btn"
+                      [class.btn-primary]="rangeDays() === 90"
+                      [class.btn-outline-primary]="rangeDays() !== 90"
+                      [attr.aria-pressed]="rangeDays() === 90"
+                      (click)="changeRange(90)">
+                {{ 'stats.range.90' | t }}
+              </button>
+            </div>
+          </div>
+
+          <div class="stats-chart" [style.height.px]="chartHeight()">
+            <canvas class="stats-canvas"
+                    baseChart
+                    [type]="lineType"
+                    [data]="lineData()"
+                    [options]="lineOpts">
+            </canvas>
+          </div>
+        </div>
+
+        <div class="card-footer d-flex justify-content-between small text-body-secondary">
+          <div>{{ 'stats.labels.lessonsCompleted' | t }}: <span class="fw-semibold">{{ totals().lessons }}</span></div>
+          <div>{{ 'stats.labels.awards' | t }}: <span class="fw-semibold">{{ totals().awards }}</span></div>
+          <div>{{ 'stats.labels.totalXp' | t }}: <span class="fw-semibold">{{ totals().xp }}</span></div>
+          <div>{{ 'stats.labels.avgPerDay' | t }}: <span class="fw-semibold">{{ avgPerDay() }}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div [ngClass]="{ 'col-lg-6': rangeDays() === 7, 'col-lg-12': rangeDays() !== 7 }">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.labels.table' | t }}</div>
+          <div *ngIf="data().length; else noXp">
+            <div class="row row-cols-1 g-2">
+              <div class="col" *ngFor="let p of data()">
+                <div class="d-flex justify-content-between small text-body-secondary">
+                  <span>{{ p.date }}</span><span>{{ p.xp }} XP</span>
+                </div>
+                <div class="progress" style="height: 6px">
+                  <div class="progress-bar" [style.width.%]="math.min(100, p.xp)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noXp>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-outline-secondary btn-sm" (click)="exportPdf()">{{ 'stats.export' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.breakdown.type' | t }}</div>
+          <div class="stats-doughnut" *ngIf="breakType().length; else noType">
+            <canvas baseChart [type]="doughType" [data]="doughTypeData()" [options]="doughOpts"></canvas>
+          </div>
+          <ng-template #noType>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.breakdown.difficulty' | t }}</div>
+          <div class="stats-doughnut" *ngIf="breakDiff().length; else noDiff">
+            <canvas baseChart [type]="doughDiff" [data]="doughDiffData()" [options]="doughOpts"></canvas>
+          </div>
+          <ng-template #noDiff>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="fw-semibold">{{ 'stats.srs.weekTitle' | t }}</div>
+            <div class="d-flex gap-2 xsmall">
+              <span class="badge text-bg-light">{{ 'stats.srs.today' | t }}
+                : {{ srsSummary()?.dueTodayCount ?? todayCount() }}</span>
+              <span class="badge text-bg-light">{{ 'stats.srs.next7' | t }}
+                : {{ srsSummary()?.dueNext7DaysCount ?? 0 }}</span>
+              <span class="badge text-bg-light">{{ 'stats.srs.totalWeek' | t }}: {{ srsWeek()?.dueTotal ?? 0 }}</span>
+            </div>
+          </div>
+          <div *ngIf="srsWeek()?.byDay?.length; else noSrs">
+            <div class="row row-cols-1 g-2">
+              <div class="col" *ngFor="let d of srsWeek()?.byDay">
+                <div class="d-flex justify-content-between small text-body-secondary">
+                  <span>{{ d.date }}</span><span>{{ d.count }}</span>
+                </div>
+                <div class="progress" style="height: 6px">
+                  <div class="progress-bar" [style.width.%]="srsPercent(d.count)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noSrs>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.eff.title' | t }}</div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="text-center flex-fill">
+              <div class="display-6 fw-semibold">{{ globalAccuracyPercent() }}%</div>
+              <div class="small text-body-secondary">{{ 'stats.eff.global' | t }}</div>
+            </div>
+            <div class="text-center flex-fill" *ngIf="avgOpenScore() !== null">
+              <div class="display-6 fw-semibold">{{ avgOpenScore() }}</div>
+              <div class="small text-body-secondary">{{ 'stats.eff.avgOpenScore' | t }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.eff.byType' | t }}</div>
+          <div class="stats-doughnut" *ngIf="(accTypeData().labels?.length || 0) > 0; else noEffType">
+            <canvas baseChart [type]="accType" [data]="accTypeData()" [options]="doughOpts"></canvas>
+          </div>
+          <ng-template #noEffType>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.eff.byDifficulty' | t }}</div>
+          <div class="stats-doughnut" *ngIf="(accDiffData().labels?.length || 0) > 0; else noEffDiff">
+            <canvas baseChart [type]="accDiff" [data]="accDiffData()" [options]="doughOpts"></canvas>
+          </div>
+          <ng-template #noEffDiff>
+            <div class="text-body-secondary small">{{ 'stats.labels.noData' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mt-1">
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'stats.activity.title' | t }}</div>
+          <div class="d-flex justify-content-between">
+            <div>
+              <div class="small text-body-secondary">{{ 'stats.activity.streak' | t }}</div>
+              <div class="fw-semibold">{{ activity()?.streakDays ?? 0 }}</div>
+            </div>
+            <div>
+              <div class="small text-body-secondary">{{ 'stats.activity.activeDays' | t }}</div>
+              <div class="fw-semibold">{{ activity()?.activeDaysCount ?? 0 }}</div>
+            </div>
+            <div>
+              <div class="small text-body-secondary">{{ 'stats.activity.last' | t }}</div>
+              <div
+                class="fw-semibold">{{ activity()?.lastActivityAt ? (activity()?.lastActivityAt | date:'short') : '—' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadTpl>
+  <div class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+</ng-template>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

@@ -1,0 +1,204 @@
+<div class="container py-3">
+  <h5 class="mb-3">{{ 'admin.llmLogs.title' | t }}</h5>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label">{{ 'admin.llmLogs.userId' | t }}</label>
+          <input id="log-user" type="number" min="1" step="1" inputmode="numeric" class="form-control form-control-sm"
+                 [ngModel]="filterUserId()" (ngModelChange)="onUserIdChange($event)"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label">{{ 'admin.llmLogs.lessonId' | t }}</label>
+          <input id="log-lesson" type="number" min="1" step="1" inputmode="numeric" class="form-control form-control-sm"
+                 [ngModel]="filterLessonId()" (ngModelChange)="onLessonIdChange($event)"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label">{{ 'admin.llmLogs.attemptId' | t }}</label>
+          <input id="log-attempt" type="number" min="1" step="1" inputmode="numeric"
+                 class="form-control form-control-sm"
+                 [ngModel]="filterAttemptId()" (ngModelChange)="onAttemptIdChange($event)"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label">{{ 'admin.llmLogs.sessionId' | t }}</label>
+          <input id="log-session" type="number" min="1" step="1" inputmode="numeric"
+                 class="form-control form-control-sm"
+                 [ngModel]="filterSessionId()" (ngModelChange)="onSessionIdChange($event)"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-2">
+          <label class="form-label">{{ 'admin.llmLogs.typeLabel' | t }}</label>
+          <select id="log-type" class="form-select form-select-sm"
+                  [ngModel]="filterType()" (ngModelChange)="onTypeChange($event)">
+            <option value="">{{ 'admin.llmLogs.typePlaceholder' | t }}</option>
+            <option value="chat">{{ 'admin.llmLogs.type.chat' | t }}</option>
+            <option value="grading">{{ 'admin.llmLogs.type.grading' | t }}</option>
+            <option value="generation">{{ 'admin.llmLogs.type.generation' | t }}</option>
+            <option value="hint">{{ 'admin.llmLogs.type.hint' | t }}</option>
+          </select>
+        </div>
+        <div class="col-md d-flex justify-content-end align-items-end">
+          <button class="btn btn-light btn-sm" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('id')" style="cursor:pointer">{{ 'common.id' | t }} <span>{{ sortArrow('id') }}</span>
+          </th>
+          <th (click)="toggleSort('userId')" style="cursor:pointer">{{ 'admin.llmLogs.userId' | t }}
+            <span>{{ sortArrow('userId') }}</span></th>
+          <th (click)="toggleSort('lessonId')" style="cursor:pointer">{{ 'admin.llmLogs.lessonId' | t }}
+            <span>{{ sortArrow('lessonId') }}</span></th>
+          <th (click)="toggleSort('exerciseAttemptId')" style="cursor:pointer">{{ 'admin.llmLogs.attemptId' | t }}
+            <span>{{ sortArrow('exerciseAttemptId') }}</span></th>
+          <th (click)="toggleSort('chatSessionId')" style="cursor:pointer">{{ 'admin.llmLogs.sessionId' | t }}
+            <span>{{ sortArrow('chatSessionId') }}</span></th>
+          <th (click)="toggleSort('interactionType')" style="cursor:pointer">{{ 'admin.llmLogs.typeLabel' | t }}
+            <span>{{ sortArrow('interactionType') }}</span></th>
+          <th (click)="toggleSort('model')" style="cursor:pointer">{{ 'admin.llmLogs.model' | t }}
+            <span>{{ sortArrow('model') }}</span></th>
+          <th (click)="toggleSort('status')" style="cursor:pointer">{{ 'admin.llmLogs.statusLabel' | t }}
+            <span>{{ sortArrow('status') }}</span></th>
+          <th (click)="toggleSort('tokensIn')" style="cursor:pointer">{{ 'admin.llmLogs.tokensIn' | t }}
+            <span>{{ sortArrow('tokensIn') }}</span></th>
+          <th (click)="toggleSort('tokensOut')" style="cursor:pointer">{{ 'admin.llmLogs.tokensOut' | t }}
+            <span>{{ sortArrow('tokensOut') }}</span></th>
+          <th (click)="toggleSort('latencyMs')" style="cursor:pointer">{{ 'admin.llmLogs.latencyMs' | t }}
+            <span>{{ sortArrow('latencyMs') }}</span></th>
+          <th>{{ 'admin.llmLogs.preview' | t }}</th>
+          <th (click)="toggleSort('createdAt')" style="cursor:pointer">{{ 'admin.llmLogs.createdAt' | t }}
+            <span>{{ sortArrow('createdAt') }}</span></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let r of pageRows(); trackBy: trackById">
+          <td>{{ r.id }}</td>
+          <td>{{ r.userId ?? '–' }}</td>
+          <td>{{ r.lessonId ?? '–' }}</td>
+          <td>{{ r.exerciseAttemptId ?? '–' }}</td>
+          <td>{{ r.chatSessionId ?? '–' }}</td>
+          <td>{{ ('admin.llmLogs.type.' + r.interactionType) | t }}</td>
+          <td>{{ r.model }}</td>
+          <td>{{ ('admin.llmLogs.statusLabel.' + r.status) | t }}</td>
+          <td>{{ r.tokensIn ?? '–' }}</td>
+          <td>{{ r.tokensOut ?? '–' }}</td>
+          <td>{{ r.latencyMs ?? '–' }}</td>
+          <td class="text-truncate" style="max-width: 320px" [title]="r.prompt">{{ r.prompt }}</td>
+          <td>{{ r.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td class="text-end">
+            <button class="btn btn-sm btn-outline-primary" (click)="showDetails(r)">{{ 'admin.llmLogs.view' | t }}
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!pageRows()?.length" class="text-center fw-bold text-body-secondary py-4">
+      {{ 'admin.llmLogs.empty' | t }}
+    </div>
+  </ng-template>
+
+  <div class="modal fade" id="logModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">{{ 'admin.llmLogs.details' | t }}</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  [attr.aria-label]="'common.close' | t"></button>
+        </div>
+        <div class="modal-body" *ngIf="selected as s">
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.typeLabel' | t }}</div>
+              <div>{{ ('admin.llmLogs.type.' + s.interactionType) | t }}</div>
+            </div>
+            <div class="col-6">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.statusLabel' | t }}</div>
+              <div>{{ ('admin.llmLogs.statusLabel.' + s.status) | t }}</div>
+            </div>
+            <div class="col-6">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.model' | t }}</div>
+              <div>{{ s.model }}</div>
+            </div>
+            <div class="col-6">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.createdAt' | t }}</div>
+              <div>{{ s.createdAt | date:'yyyy-MM-dd HH:mm' }}</div>
+            </div>
+            <div class="col-3">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.tokensIn' | t }}</div>
+              <div>{{ s.tokensIn ?? '–' }}</div>
+            </div>
+            <div class="col-3">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.tokensOut' | t }}</div>
+              <div>{{ s.tokensOut ?? '–' }}</div>
+            </div>
+            <div class="col-3">
+              <div class="text-body-secondary small">{{ 'admin.llmLogs.latencyMs' | t }}</div>
+              <div>{{ s.latencyMs ?? '–' }}</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-body-secondary small mb-1">{{ 'admin.llmLogs.prompt' | t }}</div>
+            <pre class="mb-0" style="white-space: pre-wrap">{{ s.prompt }}</pre>
+          </div>
+          <div>
+            <div class="text-body-secondary small mb-1">{{ 'admin.llmLogs.response' | t }}</div>
+            <pre class="mb-0" style="white-space: pre-wrap">{{ s.response }}</pre>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{{ 'common.close' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

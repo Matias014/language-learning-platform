@@ -1,0 +1,198 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ 'admin.achievements.title' | t }}</h5>
+    <button class="btn btn-primary btn-sm" (click)="addNew()">{{ 'common.add' | t }}</button>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label mb-0">{{ 'common.title' | t }}</label>
+          <input
+            id="ach-title"
+            class="form-control form-control-sm"
+            [ngModel]="filterTitle()"
+            (ngModelChange)="filterTitle.set(($event ?? '').toString())"
+            [placeholder]="'admin.achievements.titlePlaceholder' | t"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label mb-0">{{ 'admin.achievements.requiredXp' | t }}</label>
+          <input
+            id="ach-minxp"
+            type="number"
+            min="0"
+            class="form-control form-control-sm"
+            [ngModel]="filterMinXp()"
+            (ngModelChange)="onMinXpChange($event)"
+            [placeholder]="'admin.achievements.requiredXp' | t"
+          />
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button class="btn btn-light" type="button" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select
+        class="form-select form-select-sm"
+        style="width: auto"
+        [value]="size()"
+        (change)="changeSize(+$any($event.target).value)"
+      >
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.achievements.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor: pointer"># <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('title')" style="cursor: pointer">
+              {{ 'common.title' | t }} <span>{{ sortArrow('title') }}</span>
+            </th>
+            <th>{{ 'admin.achievements.description' | t }}</th>
+            <th (click)="toggleSort('requiredXp')" style="cursor: pointer">
+              {{ 'admin.achievements.requiredXp' | t }} <span>{{ sortArrow('requiredXp') }}</span>
+            </th>
+            <th class="text-end">{{ 'common.actions' | t }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let a of pageRows(); trackBy: trackById">
+            <td>{{ a.id }}</td>
+            <td class="d-flex align-items-center gap-2">
+              <img *ngIf="a.iconPath" [src]="a.iconPath!" alt="" width="20" height="20" class="border rounded obj-cover" />
+              <span>{{ a.title }}</span>
+            </td>
+            <td>{{ a.description || '' }}</td>
+            <td>{{ a.requiredXp ?? 0 }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(a)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(a.id)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <div *ngIf="editingId() !== null" class="card mt-3">
+    <div class="card-header d-flex align-items-center gap-2">
+      <span>{{ isCreate() ? ('common.add' | t) : ('common.edit' | t) }}</span>
+      <span>– {{ 'admin.achievements.title' | t }}</span>
+      <span *ngIf="!isCreate()">#{{ editingId() }}</span>
+    </div>
+
+    <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+      <label class="form-label mb-0">{{ 'common.title' | t }}</label>
+      <input class="form-control" formControlName="title" [placeholder]="'admin.achievements.titlePlaceholder' | t" />
+      <div class="text-danger small" *ngIf="form.get('title')?.errors?.['server'] as errs">
+        <div *ngFor="let e of errs">{{ e }}</div>
+      </div>
+
+      <label class="form-label mb-0">{{ 'admin.achievements.description' | t }}</label>
+      <textarea
+        class="form-control"
+        rows="3"
+        formControlName="description"
+        [placeholder]="'admin.achievements.descriptionPlaceholder' | t"
+      ></textarea>
+      <div class="text-danger small" *ngIf="form.get('description')?.errors?.['server'] as errs">
+        <div *ngFor="let e of errs">{{ e }}</div>
+      </div>
+
+      <div class="mt-2">
+        <label class="form-label">{{ 'admin.achievements.icon' | t }}</label>
+        <div class="row g-2 align-items-center">
+          <div class="col-auto">
+            <img
+              [src]="iconPreviewSrc()"
+              (error)="onIconError($event)"
+              class="avatar-preview"
+              width="96"
+              height="96"
+              [alt]="'admin.achievements.icon' | t"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="file"
+              class="form-control"
+              accept="image/png,image/jpeg,image/webp"
+              (change)="onIconFileChange($event)"
+              [disabled]="uploadingIcon()"
+            />
+            <div *ngIf="uploadingIcon()" class="form-text">
+              {{ 'common.uploading' | t }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <label class="form-label mb-0">{{ 'admin.achievements.requiredXp' | t }}</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="requiredXp"
+        inputmode="numeric"
+        step="1"
+        min="0"
+        [placeholder]="'admin.achievements.requiredXp' | t"
+      />
+      <div class="text-danger small" *ngIf="form.get('requiredXp')?.errors?.['server'] as errs">
+        <div *ngFor="let e of errs">{{ e }}</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-2">
+        <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+        <button class="btn btn-primary" [disabled]="form.invalid || uploadingIcon()">{{ 'common.save' | t }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

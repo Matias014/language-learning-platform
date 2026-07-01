@@ -1,0 +1,149 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ 'admin.proficiencyLevels.title' | t }}</h5>
+    <button class="btn btn-primary btn-sm" (click)="addNew()">{{ 'common.add' | t }}</button>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">{{ 'common.search' | t }}</label>
+          <input class="form-control"
+                 [ngModel]="filter()"
+                 (ngModelChange)="onFilterChange($event)"/>
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button type="button" class="btn btn-light" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.proficiencyLevels.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('code')" style="cursor:pointer">
+              {{ 'admin.proficiencyLevels.code' | t }} <span>{{ sortArrow('code') }}</span>
+            </th>
+            <th (click)="toggleSort('name')" style="cursor:pointer">
+              {{ 'common.name' | t }} <span>{{ sortArrow('name') }}</span>
+            </th>
+            <th (click)="toggleSort('orderNumber')" style="cursor:pointer">
+              {{ 'admin.proficiencyLevels.order' | t }} <span>{{ sortArrow('orderNumber') }}</span>
+            </th>
+            <th class="text-end">{{ 'common.actions' | t }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let l of pageRows(); trackBy: trackByCode">
+            <td>{{ l.code }}</td>
+            <td>{{ l.name }}</td>
+            <td>{{ l.orderNumber }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(l)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(l.code)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <div *ngIf="editingCode() !== null" class="card mt-3">
+    <div class="card-header">
+      {{ isCreate() ? ('common.add' | t) : ('common.edit' | t) }} – {{ 'admin.proficiencyLevels.title' | t }}
+    </div>
+
+    <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+      <label class="form-label" for="pl-code">{{ 'admin.proficiencyLevels.code' | t }}</label>
+      <input id="pl-code" class="form-control"
+             formControlName="code"
+             [readonly]="!isCreate()"
+             [placeholder]="'admin.proficiencyLevels.codePlaceholder' | t"/>
+      <div class="text-danger small" *ngIf="form.controls.code.touched && form.controls.code.invalid">
+        <div *ngIf="form.controls.code.errors?.['required']">{{ 'validation.required' | t }}</div>
+        <div *ngIf="form.controls.code.errors?.['pattern']">{{ 'validation.pattern' | t }}</div>
+        <div *ngIf="form.controls.code.errors?.['server'] as msgs">
+          <div *ngFor="let m of msgs">{{ m }}</div>
+        </div>
+      </div>
+
+      <label class="form-label" for="pl-name">{{ 'common.name' | t }}</label>
+      <input id="pl-name" class="form-control"
+             formControlName="name"
+             [placeholder]="'common.name' | t"/>
+      <div class="text-danger small" *ngIf="form.controls.name.touched && form.controls.name.invalid">
+        <div *ngIf="form.controls.name.errors?.['required']">{{ 'validation.required' | t }}</div>
+        <div *ngIf="form.controls.name.errors?.['maxlength']">{{ 'validation.maxLength' | t:{max: 50} }}</div>
+        <div *ngIf="form.controls.name.errors?.['server'] as msgs">
+          <div *ngFor="let m of msgs">{{ m }}</div>
+        </div>
+      </div>
+
+      <label class="form-label" for="pl-order">{{ 'admin.proficiencyLevels.order' | t }}</label>
+      <input id="pl-order" type="number" class="form-control"
+             formControlName="orderNumber"
+             [placeholder]="'admin.proficiencyLevels.orderPlaceholder' | t"/>
+      <div class="text-danger small" *ngIf="form.controls.orderNumber.touched && form.controls.orderNumber.invalid">
+        <div *ngIf="form.controls.orderNumber.errors?.['required']">{{ 'validation.required' | t }}</div>
+        <div *ngIf="form.controls.orderNumber.errors?.['min']">{{ 'validation.min' | t:{min: 1} }}</div>
+        <div *ngIf="form.controls.orderNumber.errors?.['server'] as msgs">
+          <div *ngFor="let m of msgs">{{ m }}</div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-2">
+        <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+        <button class="btn btn-primary" [disabled]="form.invalid">{{ 'common.save' | t }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

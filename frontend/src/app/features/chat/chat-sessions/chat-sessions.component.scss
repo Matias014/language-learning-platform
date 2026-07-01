@@ -1,0 +1,48 @@
+.container {
+  max-width: 1000px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #6c757d;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.confirm-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background: #fff3f3;
+  border: 1px solid #f5c2c7;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1060;
+}
+
+.toast-item {
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  min-width: 260px;
+  cursor: pointer;
+}
+
+.toast-item.success {
+  background: #198754;
+}
+
+.toast-item.error {
+  background: #dc3545;
+}

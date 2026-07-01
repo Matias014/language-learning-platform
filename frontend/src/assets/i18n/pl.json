@@ -1,0 +1,926 @@
+{
+  "common": {
+    "add": "Dodaj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "create": "Dodaj",
+    "goHome": "Wróć na stronę główną",
+    "select": "Wybierz",
+    "name": "Nazwa",
+    "title": "Tytuł",
+    "upload": "Wyślij",
+    "uploading": "Wysyłanie…",
+    "reload": "Odśwież",
+    "close": "Zamknij",
+    "actions": "Akcje",
+    "goDashboard": "Przejdź do panelu",
+    "loadFailed": "Nie udało się pobrać danych.",
+    "saveFailed": "Nie udało się zapisać.",
+    "deleteFailed": "Nie udało się usunąć.",
+    "clearFilters": "Wyczyść filtry",
+    "id": "ID",
+    "search": "Szukaj",
+    "clear": "Wyczyść",
+    "pageSize": "Rozmiar strony",
+    "pagination": "Strona",
+    "total": "łącznie",
+    "all": "wszystko",
+    "areYouSure": "Na pewno?"
+  },
+  "roles": {
+    "user": "użytkownik",
+    "admin": "administrator"
+  },
+  "exercise": {
+    "type": {
+      "quiz": "Quiz",
+      "fill_in": "Uzupełnianie",
+      "writing": "Pisanie"
+    }
+  },
+  "difficulty": {
+    "easy": "Łatwe",
+    "medium": "Średnie",
+    "hard": "Trudne"
+  },
+  "validation": {
+    "required": "Pole jest wymagane.",
+    "email": "Nieprawidłowy adres e-mail.",
+    "minLength": "Minimum {min} znaki/znaków.",
+    "maxLength": "Maksymalnie {max} znaków.",
+    "min": "Wartość nie może być mniejsza niż {min}.",
+    "max": "Wartość nie może być większa niż {max}.",
+    "pattern": "Wartość nie spełnia wymaganego formatu.",
+    "number": "Wprowadź liczbę.",
+    "integer": "Wprowadź liczbę całkowitą."
+  },
+  "errors": {
+    "notFound": "Strona nie została znaleziona.",
+    "unauthorized": "Brak autoryzacji.",
+    "forbidden": "Brak uprawnień.",
+    "conflict": "Konflikt danych.",
+    "badRequest": "Nieprawidłowe dane.",
+    "serviceUnavailable": "Usługa chwilowo niedostępna.",
+    "default": "Coś poszło nie tak."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "courses": "Kursy",
+    "reviews": "Powtórki",
+    "chat": "Czat",
+    "admin": "Administrator",
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
+    "profile": "Mój profil",
+    "logout": "Wyloguj się"
+  },
+  "lang": {
+    "switch": "Język",
+    "en": "Angielski",
+    "pl": "Polski",
+    "enShort": "EN",
+    "plShort": "PL"
+  },
+  "auth": {
+    "common": {
+      "login": "Login",
+      "email": "E-mail",
+      "password": "Hasło",
+      "newPassword": "Nowe hasło",
+      "backToLogin": "Powrót do logowania",
+      "goToLogin": "Przejdź do logowania"
+    },
+    "login": {
+      "title": "Zaloguj się",
+      "remember": "Zapamiętaj mnie",
+      "submit": "Zaloguj",
+      "noAccount": "Nie masz konta?",
+      "loginOrEmail": "Login lub e-mail",
+      "registerCta": "Zarejestruj się",
+      "errors": {
+        "invalid": "Nieprawidłowy login/e-mail lub hasło.",
+        "generic": "Nie udało się zalogować.",
+        "throttle": "Za dużo prób. Spróbuj ponownie później.",
+        "throttleIn": "Za dużo prób. Spróbuj ponownie za {seconds} s."
+      }
+    },
+    "register": {
+      "title": "Rejestracja",
+      "name": "Imię",
+      "surname": "Nazwisko",
+      "confirmPassword": "Powtórz hasło",
+      "submit": "Utwórz konto",
+      "haveAccount": "Masz już konto?",
+      "loginCta": "Zaloguj się",
+      "validation": {
+        "loginPattern": "Login może zawierać litery, cyfry, kropkę, podkreślenie lub myślnik.",
+        "loginMin": "Login musi mieć min. 3 znaki.",
+        "passwordMin": "Hasło musi mieć min. 8 znaków.",
+        "passwordMismatch": "Hasła nie są takie same."
+      },
+      "errors": {
+        "loginTaken": "Ten login jest już zajęty.",
+        "emailTaken": "Ten e-mail jest już zajęty.",
+        "conflict": "Login lub e-mail jest już zajęty.",
+        "generic": "Nie udało się utworzyć konta."
+      }
+    }
+  },
+  "profile": {
+    "adminBadge": "admin",
+    "actions": {
+      "resetPassword": "Resetuj hasło e-mailem",
+      "export": "Eksport danych",
+      "delete": "Usuń konto",
+      "edit": "Edytuj profil",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "confirm": "Potwierdź"
+    },
+    "changePassword": {
+      "sectionTitle": "Zmień hasło"
+    },
+    "labels": {
+      "login": "Login",
+      "name": "Imię",
+      "surname": "Nazwisko",
+      "email": "E-mail",
+      "avatar": "Avatar",
+      "xpLevel": "Poziom",
+      "totalXp": "Suma XP",
+      "toNext": "XP do następnego poziomu",
+      "achievements": "Osiągnięcia",
+      "noAchievements": "Brak osiągnięć",
+      "avatarAlt": "Avatar użytkownika {username}",
+      "avatarFile": "Plik avatara",
+      "currentPassword": "Bieżące hasło",
+      "newPassword": "Nowe hasło",
+      "confirmNewPassword": "Potwierdź nowe hasło"
+    },
+    "delete": {
+      "title": "Usuń konto",
+      "text": "Tej operacji nie można cofnąć. Twoje dane zostaną zanonimizowane."
+    },
+    "changeAuth": {
+      "titleBoth": "Potwierdź zmianę loginu i e-maila",
+      "hintBoth": "Aby zmienić login i e-mail, podaj bieżące hasło."
+    },
+    "changeLogin": {
+      "title": "Potwierdź zmianę loginu",
+      "hint": "Aby zmienić login, podaj bieżące hasło.",
+      "currentPassword": "Bieżące hasło"
+    },
+    "changeEmail": {
+      "title": "Potwierdź zmianę e-maila",
+      "hint": "Aby zmienić e-mail, podaj bieżące hasło.",
+      "currentPassword": "Bieżące hasło"
+    },
+    "alerts": {
+      "saved": "Zapisano zmiany.",
+      "noChanges": "Brak zmian do zapisania.",
+      "saveFailed": "Nie udało się zapisać zmian.",
+      "deletedError": "Nie udało się usunąć konta.",
+      "exportOk": "Wyeksportowano dane.",
+      "exportFail": "Nie udało się wyeksportować danych.",
+      "missingEmail": "Brak adresu e-mail.",
+      "throttle": "Za dużo prób. Spróbuj ponownie później.",
+      "resetSent": "Wysłaliśmy link do zmiany hasła na podany e-mail (jeśli konto istnieje).",
+      "wrongPassword": "Błędne hasło.",
+      "loginTaken": "Login jest już zajęty.",
+      "providePassword": "Podaj bieżące hasło, aby potwierdzić.",
+      "emailTaken": "E-mail jest już zajęty.",
+      "passwordLength": "Hasło musi mieć co najmniej 8 znaków.",
+      "passwordMismatch": "Hasła się nie zgadzają."
+    }
+  },
+  "courses": {
+    "title": "Kursy",
+    "new": "Nowy kurs",
+    "language": "Język",
+    "sourceLanguage": "Język wsparcia",
+    "level": "Poziom",
+    "titleField": "Tytuł",
+    "description": "Opis"
+  },
+  "lessons": {
+    "title": "Lekcja",
+    "previous": "Poprzednie",
+    "next": "Następne",
+    "hint": "Podpowiedź",
+    "submit": "Wyślij",
+    "history": "Historia prób",
+    "correct": "Poprawnie!",
+    "tryAgain": "Spróbuj jeszcze raz",
+    "hintsTitle": "Podpowiedzi",
+    "awardedXp": "+{xp} XP",
+    "hintEmpty": "Wyświetlam podpowiedź startową.",
+    "timelineTotal": "Razem: {count}",
+    "attemptNumber": "Próba #{no}",
+    "correctShort": "OK",
+    "incorrectShort": "BŁĄD",
+    "scoreLabel": "Wynik: {score}%",
+    "feedbackLabel": "Informacja zwrotna:",
+    "answerLabel": "Odpowiedź:",
+    "noAttempts": "Brak prób dla tego ćwiczenia.",
+    "completedNoXp": "Ukończono (bez XP)",
+    "xp": "XP: {xp}",
+    "progressAria": "postęp lekcji",
+    "summaryTitle": "{title} — podsumowanie",
+    "summary": {
+      "exercises": "Ćwiczeń",
+      "totalAttempts": "Prób łącznie",
+      "hints": "Podpowiedzi",
+      "time": "Czas",
+      "totalXp": "XP {xp}",
+      "avgAttemptsPerExercise": "Śr. prób/ćw."
+    }
+  },
+  "srs": {
+    "title": "Powtórki (SRS)",
+    "buttons": {
+      "dashboard": "Dashboard",
+      "srs": "SRS",
+      "openLesson": "Otwórz lekcję"
+    },
+    "info": {
+      "completedFromActive": "To są zaliczone zadania kwalifikujące się do powtórki SRS z Twoich aktywnych kursów."
+    },
+    "sections": {
+      "dueToday": "Do powtórki dziś",
+      "upcoming": "Nadchodzące"
+    },
+    "labels": {
+      "lesson": "Lekcja",
+      "stage": "etap {now}",
+      "dueDate": "Termin: {date}",
+      "total": "Łącznie: {count}"
+    },
+    "empty": {
+      "today": "Dziś brak elementów do powtórki."
+    },
+    "errors": {
+      "loadFailed": "Nie udało się pobrać danych SRS."
+    }
+  },
+  "stats": {
+    "title": "Statystyki",
+    "export": "Eksportuj PDF",
+    "range": {
+      "7": "7 dni",
+      "30": "30 dni",
+      "90": "90 dni",
+      "aria": "Zakres wykresu"
+    },
+    "labels": {
+      "lessonsCompleted": "Ukończone lekcje",
+      "awards": "Nagród",
+      "totalXp": "Suma XP",
+      "avgPerDay": "Średnio/dzień",
+      "table": "Tabela XP",
+      "noData": "Brak danych."
+    },
+    "user": {
+      "login": "Login",
+      "xp": "XP"
+    },
+    "breakdown": {
+      "type": "XP wg typu ćwiczeń",
+      "difficulty": "XP wg trudności"
+    },
+    "srs": {
+      "weekTitle": "SRS — ten tydzień",
+      "today": "Dzisiaj",
+      "totalWeek": "W tygodniu",
+      "next7": "W najbliższych 7 dniach"
+    },
+    "eff": {
+      "title": "Poprawność odpowiedzi",
+      "global": "Poprawność globalna",
+      "avgOpenScore": "Śr. wynik (otwarte)",
+      "byType": "Poprawność wg typu",
+      "byDifficulty": "Poprawność wg trudności"
+    },
+    "activity": {
+      "title": "Aktywność",
+      "streak": "Seria dni",
+      "activeDays": "Aktywne dni",
+      "last": "Ostatnia aktywność"
+    }
+  },
+  "admin": {
+    "nav": {
+      "users": "Użytkownicy",
+      "courses": "Kursy",
+      "lessons": "Lekcje",
+      "exercises": "Ćwiczenia",
+      "languages": "Języki",
+      "proficiencyLevels": "Poziomy biegłości",
+      "proficiency": "Poziomy biegłości",
+      "levels": "Poziomy",
+      "achievements": "Osiągnięcia",
+      "courseEnrollments": "Zapisy",
+      "exerciseAttempts": "Próby",
+      "exerciseAwards": "Nagrody",
+      "userLessonProgress": "Postęp użytkowników",
+      "llmLogs": "Logi LLM",
+      "userAchievements": "Osiągnięcia użytkowników",
+      "reports": "Raporty/Eksport",
+      "chatSessions": "Sesje czatu",
+      "chatMessages": "Wiadomości czatu"
+    },
+    "users": {
+      "title": "Użytkownicy",
+      "addUser": "Dodaj użytkownika",
+      "role": "Rola",
+      "login": "Login",
+      "email": "E-mail",
+      "roleInfo": "Rola jest ustawiana po stronie serwera i nie podlega edycji w tym formularzu.",
+      "confirmDelete": "Usunąć użytkownika?",
+      "passwordInfo": "Pole opcjonalne. Gdy wypełnisz, ustawi nowe hasło użytkownika.",
+      "errors": {
+        "load": "Nie udało się załadować użytkowników.",
+        "create": "Nie udało się utworzyć użytkownika.",
+        "update": "Nie udało się zaktualizować użytkownika.",
+        "delete": "Nie udało się usunąć użytkownika."
+      },
+      "msg": {
+        "loginTaken": "Ten login jest już zajęty.",
+        "emailTaken": "Ten adres e-mail jest już używany.",
+        "invalidCredentials": "Niepoprawne dane uwierzytelniające.",
+        "unauthenticated": "Musisz być zalogowany.",
+        "forbidden": "Brak uprawnień do wykonania tej operacji.",
+        "notFound": "Użytkownik nie został znaleziony."
+      },
+      "alerts": {
+        "created": "Utworzono użytkownika.",
+        "updated": "Zaktualizowano użytkownika.",
+        "deleted": "Usunięto użytkownika."
+      }
+    },
+    "courses": {
+      "id": "ID",
+      "confirmDelete": "Usunąć kurs?",
+      "empty": "Brak kursów.",
+      "title": "Kursy",
+      "editCourse": "Edytuj kurs",
+      "createCourse": "Utwórz kurs",
+      "language": "Język docelowy",
+      "source": "Język wsparcia",
+      "titleCol": "Tytuł",
+      "level": "Poziom",
+      "description": "Opis",
+      "errors": {
+        "load": "Nie udało się pobrać kursów.",
+        "save": "Nie udało się zapisać kursu.",
+        "delete": "Nie udało się usunąć kursu."
+      },
+      "alerts": {
+        "created": "Utworzono kurs.",
+        "updated": "Zaktualizowano kurs.",
+        "deleted": "Usunięto kurs."
+      }
+    },
+    "lessons": {
+      "title": "Lekcje",
+      "course": "Kurs",
+      "id": "ID",
+      "name": "Tytuł",
+      "order": "Kolejność",
+      "empty": "Brak lekcji dla wybranego kursu.",
+      "confirmDelete": "Usunąć lekcję? To może usunąć powiązane dane.",
+      "description": "Opis",
+      "filtersHelp": "Filtruj po ID, tytule lub kolejności.",
+      "alerts": {
+        "saved": "Zapisano lekcję.",
+        "deleted": "Usunięto lekcję."
+      }
+    },
+    "exercises": {
+      "title": "Ćwiczenia",
+      "type": "Typ",
+      "question": "Pytanie",
+      "order": "Kolejność",
+      "filterType": "Filtruj po typie",
+      "filterDifficulty": "Filtruj po trudności",
+      "filterMinXp": "Min. XP",
+      "filterQuery": "Szukaj w pytaniu",
+      "xp": "XP",
+      "difficulty": "Trudność",
+      "edit": "Edytuj",
+      "empty": "Brak ćwiczeń dla wybranej lekcji.",
+      "generator": {
+        "title": "Generator ćwiczeń (AI)",
+        "forLesson": "Dla lekcji #{id}",
+        "topicLabel": "Temat (1–100 znaków)",
+        "countLabel": "Ile",
+        "xpLabel": "XP",
+        "start": "Generuj",
+        "generated": "Wygenerowano {count} ćw."
+      },
+      "errors": {
+        "disabled404": "Funkcja AI jest wyłączona (404).",
+        "unavailable503": "Usługa AI chwilowo niedostępna (503).",
+        "generic": "Nie udało się wygenerować ćwiczeń.",
+        "load": "Nie udało się pobrać danych ćwiczeń."
+      }
+    },
+    "languages": {
+      "title": "Języki",
+      "code": "Kod",
+      "name": "Nazwa",
+      "confirmDelete": "Usunąć język?",
+      "empty": "Brak języków.",
+      "errors": {
+        "load": "Nie udało się pobrać języków.",
+        "create": "Nie udało się utworzyć języka.",
+        "update": "Nie udało się zaktualizować języka.",
+        "delete": "Nie udało się usunąć języka."
+      },
+      "alerts": {
+        "created": "Utworzono język.",
+        "updated": "Zaktualizowano język.",
+        "deleted": "Usunięto język."
+      }
+    },
+    "proficiencyLevels": {
+      "title": "Poziomy biegłości",
+      "code": "Kod",
+      "order": "Kolejność",
+      "codePlaceholder": "np. A2, B1, C1",
+      "orderPlaceholder": "Kolejność (≥ 1)",
+      "confirmDelete": "Usunąć poziom biegłości?",
+      "empty": "Brak wpisów.",
+      "errors": {
+        "load": "Nie udało się pobrać poziomów biegłości.",
+        "create": "Nie udało się utworzyć poziomu biegłości.",
+        "update": "Nie udało się zaktualizować poziomu biegłości.",
+        "delete": "Nie udało się usunąć poziomu biegłości."
+      },
+      "alerts": {
+        "created": "Utworzono poziom biegłości.",
+        "updated": "Zaktualizowano poziom biegłości.",
+        "deleted": "Usunięto poziom biegłości."
+      }
+    },
+    "levels": {
+      "title": "Poziomy",
+      "level": "Poziom",
+      "requiredXp": "Wymagane XP",
+      "empty": "Brak poziomów do wyświetlenia",
+      "confirmDelete": "Na pewno usunąć ten poziom?",
+      "alerts": {
+        "created": "Poziom utworzony",
+        "updated": "Poziom zaktualizowany",
+        "deleted": "Poziom usunięty"
+      }
+    },
+    "achievements": {
+      "title": "Osiągnięcia",
+      "description": "Opis",
+      "descriptionPlaceholder": "Krótki opis odznaki…",
+      "icon": "Ikona",
+      "iconPlaceholder": "URL do ikony (opcjonalnie)",
+      "requiredXp": "Wymagany XP",
+      "confirmDelete": "Usunąć osiągnięcie?",
+      "titlePlaceholder": "Tytuł odznaki",
+      "errors": {
+        "load": "Nie udało się pobrać osiągnięć."
+      },
+      "empty": "Brak osiągnięć."
+    },
+    "enrollments": {
+      "title": "Zapisy",
+      "user": "Użytkownik",
+      "course": "Kurs",
+      "status": "Status",
+      "currentLesson": "Bieżąca lekcja",
+      "lastActivity": "Ostatnia aktywność",
+      "filterUser": "Filtruj po użytkowniku",
+      "filterCourse": "Filtruj po kursie",
+      "filterStatus": "Status",
+      "confirmDelete": "Usunąć zapis?",
+      "statuses": {
+        "in_progress": "W toku",
+        "completed": "Ukończony"
+      },
+      "startedAt": "Rozpoczęto",
+      "completedAt": "Ukończono",
+      "empty": "Brak zapisów.",
+      "errors": {
+        "load": "Nie udało się pobrać zapisów.",
+        "update": "Nie udało się zaktualizować zapisu.",
+        "delete": "Nie udało się usunąć zapisu."
+      }
+    },
+    "userAchievements": {
+      "title": "Osiągnięcia użytkowników",
+      "user": "Użytkownik",
+      "achievement": "Osiągnięcie",
+      "earnedAt": "Przyznano",
+      "filterUser": "Filtruj po użytkowniku (ID)",
+      "filterAchievement": "Filtruj po osiągnięciu (ID)",
+      "confirmDelete": "Usunąć wpis osiągnięcia użytkownika?",
+      "empty": "Brak wpisów.",
+      "errors": {
+        "load": "Nie udało się pobrać osiągnięć użytkownika.",
+        "create": "Nie udało się dodać osiągnięcia użytkownika.",
+        "update": "Nie udało się zaktualizować osiągnięcia użytkownika.",
+        "delete": "Nie udało się usunąć osiągnięcia użytkownika."
+      },
+      "alerts": {
+        "created": "Dodano osiągnięcie użytkownika.",
+        "updated": "Zaktualizowano osiągnięcie użytkownika.",
+        "deleted": "Usunięto osiągnięcie użytkownika."
+      }
+    },
+    "attempts": {
+      "title": "Próby",
+      "user": "Użytkownik ID",
+      "exercise": "Ćwiczenie ID",
+      "attemptNo": "Próba #",
+      "correct": "Poprawna",
+      "score": "Wynik",
+      "submittedAt": "Data",
+      "duration": "Czas [s]",
+      "answer": "Odpowiedź",
+      "feedback": "Informacja zwrotna",
+      "filtersHelp": "Podaj ID ćwiczenia, aby wyświetlić próby. Opcjonalnie zawęź po ID użytkownika.",
+      "confirmDelete": "Usunąć próbę?",
+      "filterCorrect": "Poprawność",
+      "onlyCorrect": "Tylko poprawne",
+      "onlyIncorrect": "Tylko błędne"
+    },
+    "chatSessions": {
+      "title": "Sesje czatu",
+      "titleCol": "Tytuł",
+      "user": "Użytkownik",
+      "course": "Kurs",
+      "lesson": "Lekcja",
+      "startedAt": "Start",
+      "endedAt": "Koniec",
+      "userId": "ID użytkownika",
+      "courseId": "ID kursu",
+      "lessonId": "ID lekcji",
+      "viewMessages": "Zobacz wiadomości",
+      "confirmDelete": "Usunąć sesję? To również usunie wszystkie jej wiadomości i powiązane logi.",
+      "empty": "Brak sesji",
+      "errors": {
+        "load": "Nie udało się pobrać sesji czatu.",
+        "delete": "Nie udało się usunąć sesji."
+      }
+    },
+    "chatMessages": {
+      "title": "Wiadomości czatu",
+      "sessionId": "ID sesji",
+      "sender": "Nadawca",
+      "message": "Wiadomość",
+      "sentAt": "Wysłano",
+      "confirmDelete": "Usunąć wiadomość?",
+      "empty": "Brak wiadomości",
+      "errors": {
+        "load": "Nie udało się pobrać wiadomości czatu.",
+        "delete": "Nie udało się usunąć wiadomości."
+      }
+    },
+    "awards": {
+      "title": "Nagrody",
+      "user": "Użytkownik",
+      "exercise": "Ćwiczenie",
+      "attempt": "ID próby",
+      "xp": "XP",
+      "createdAt": "Utworzono",
+      "confirmDelete": "Usunąć nagrodę?",
+      "filtersHelp": "Podaj ID użytkownika. Opcjonalnie zawęź po ID próby.",
+      "empty": "Brak nagród.",
+      "errors": {
+        "load": "Nie udało się pobrać nagród."
+      }
+    },
+    "userProgress": {
+      "title": "Postęp użytkowników",
+      "user": "Użytkownik",
+      "lesson": "Lekcja",
+      "status": "Status",
+      "completedExercises": "Ukończone ćwiczenia",
+      "lastActivityAt": "Ostatnia aktywność",
+      "empty": "Brak wpisów.",
+      "completedAt": "Zakończono",
+      "errors": {
+        "load": "Nie udało się pobrać postępu użytkownika."
+      }
+    },
+    "llmLogs": {
+      "title": "Logi LLM",
+      "userId": "Użytkownik ID",
+      "lessonId": "Lekcja ID",
+      "attemptId": "Próba ID",
+      "sessionId": "ID sesji",
+      "typeLabel": "Typ",
+      "typePlaceholder": "Wszystkie typy",
+      "type": {
+        "chat": "Czat",
+        "grading": "Ocenianie",
+        "generation": "Generowanie",
+        "hint": "Podpowiedź"
+      },
+      "model": "Model",
+      "statusLabel": "Status",
+      "status": {
+        "ok": "OK",
+        "timeout": "Przekroczono czas",
+        "rate_limited": "Limit zapytań",
+        "quota_exceeded": "Przekroczona kwota",
+        "safety_block": "Blokada bezpieczeństwa",
+        "invalid_request": "Błędne żądanie",
+        "server_error": "Błąd serwera"
+      },
+      "tokensIn": "Tokeny wej.",
+      "tokensOut": "Tokeny wyj.",
+      "latencyMs": "Opóźnienie [ms]",
+      "preview": "Podgląd promptu",
+      "createdAt": "Utworzono",
+      "view": "Podgląd",
+      "details": "Szczegóły wpisu",
+      "prompt": "Prompt",
+      "response": "Odpowiedź",
+      "empty": "Brak logów.",
+      "errors": {
+        "load": "Nie udało się pobrać logów."
+      }
+    },
+    "resetTokens": {
+      "title": "Tokeny resetu",
+      "user": "Użytkownik",
+      "token": "Token",
+      "expiresAt": "Wygasa",
+      "usedAt": "Użyto",
+      "createdAt": "Utworzono"
+    },
+    "reports": {
+      "title": "Raporty administracyjne",
+      "llm": {
+        "title": "Statystyki LLM",
+        "byType": "Wywołania wg typu",
+        "byStatus": "Wywołania wg statusu",
+        "calls": "Wywołania",
+        "tokensIn": "Tokeny wej.",
+        "tokensOut": "Tokeny wyj.",
+        "latency": "Śr. opóźnienie [ms]"
+      },
+      "hardest": {
+        "title": "Najtrudniejsze zadania",
+        "exerciseId": "ID zadania",
+        "avgAccuracy": "Śr. skuteczność",
+        "avgTime": "Śr. czas",
+        "limit": "Limit"
+      }
+    }
+  },
+  "chat": {
+    "new": {
+      "title": "Nowa rozmowa",
+      "titlePlaceholder": "Tytuł rozmowy",
+      "languageLabel": "Język",
+      "start": "Rozpocznij",
+      "browseCourses": "Przeglądaj kursy"
+    },
+    "alerts": {
+      "titleSaved": "Zaktualizowano tytuł.",
+      "sessionDeleted": "Usunięto sesję.",
+      "sessionCreated": "Utworzono sesję.",
+      "languageSaved": "Zmieniono język rozmowy."
+    },
+    "session": {
+      "untitled": "Rozmowa",
+      "language": "Język rozmowy",
+      "new": "Nowa rozmowa",
+      "inputPlaceholder": "Napisz wiadomość…",
+      "send": "Wyślij",
+      "closed": "Ta sesja została zamknięta.",
+      "rename": "Zmień tytuł",
+      "state": {
+        "open": "Otwarte",
+        "closed": "Zamknięte"
+      }
+    },
+    "context": {
+      "course": "Kurs",
+      "lesson": "Lekcja"
+    },
+    "list": {
+      "title": "Tryb rozmowy",
+      "home": "Strona główna",
+      "titlePlaceholder": "Tytuł sesji",
+      "new": "Nowa sesja",
+      "lastActivity": "Ostatnia aktywność",
+      "open": "Otwórz",
+      "delete": "Usuń",
+      "empty": "Brak sesji. Utwórz nową powyżej.",
+      "defaultTitle": "Nowa sesja"
+    },
+    "message": {
+      "you": "Ty",
+      "ai": "AI"
+    },
+    "errors": {
+      "fetchSession": "Nie udało się pobrać sesji.",
+      "fetchSessions": "Nie udało się pobrać sesji.",
+      "fetchMessages": "Nie udało się pobrać wiadomości.",
+      "createSession": "Nie udało się utworzyć sesji.",
+      "deleteSession": "Nie udało się usunąć sesji.",
+      "send": "Nie udało się wysłać wiadomości.",
+      "notFound": "Sesja nie istnieje.",
+      "tooLong": "Wiadomość jest zbyt długa (max {max} znaków).",
+      "closed": "Ta sesja została zamknięta.",
+      "aiDisabled": "Czat AI jest wyłączony w tym środowisku.",
+      "updateSession": "Nie udało się zaktualizować sesji."
+    },
+    "lang": {
+      "auto": "auto",
+      "en": "en",
+      "pl": "pl"
+    },
+    "start": "Rozpocznij czat"
+  },
+  "server": {
+    "LOGIN_TAKEN": "Ten login jest już zajęty.",
+    "EMAIL_TAKEN": "Ten e-mail jest już zajęty.",
+    "INVALID_CREDENTIALS": "Nieprawidłowy login/e-mail lub hasło.",
+    "CODE_TAKEN": "Taki kod już istnieje.",
+    "LEVEL_TAKEN": "Taki poziom już istnieje.",
+    "LEVEL_POSITIVE": "Poziom musi być dodatni.",
+    "REQUIRED_XP_NON_NEGATIVE": "Wymagane XP nie może być ujemne.",
+    "LEVEL_REQUIRED": "Poziom jest wymagany.",
+    "NEGATIVE_XP": "XP nie może być ujemne.",
+    "QUESTION_REQUIRED": "Pytanie jest wymagane.",
+    "INVALID_ANSWER_SCHEMA_ACCEPTABLE": "Nieprawidłowa struktura odpowiedzi (acceptable).",
+    "CANNOT_SET_CORRECT_OPTION_FOR_NON_QUIZ": "Poprawna opcja tylko dla typu quiz.",
+    "CORRECT_OPTION_NOT_BELONG_TO_EXERCISE": "Wybrana opcja nie należy do tego ćwiczenia.",
+    "CANNOT_SET_DELETED_OPTION": "Nie można ustawić usuniętej opcji jako poprawnej.",
+    "NOT_A_QUIZ_EXERCISE": "To ćwiczenie nie jest typu quiz.",
+    "CONTENT_REQUIRED": "Treść jest wymagana.",
+    "ORDER_NUMBER_MIN_1": "Numer porządkowy musi być ≥ 1.",
+    "ORDER_NUMBER_TAKEN": "Taki numer porządkowy już istnieje.",
+    "CHOSEN_OPTION_REQUIRED_FOR_QUIZ": "W quizie musisz wskazać odpowiedź.",
+    "OPTION_NOT_ALLOWED_FOR_NON_QUIZ": "Opcja nie jest dozwolona dla tego typu ćwiczenia.",
+    "ANSWER_REQUIRED_FOR_NON_QUIZ": "Odpowiedź jest wymagana.",
+    "CONCURRENT_ATTEMPT": "Wykryto równoległą próbę. Spróbuj ponownie.",
+    "ALREADY_ENROLLED": "Użytkownik jest już zapisany na kurs.",
+    "ALREADY_EXISTS": "Taki wpis już istnieje.",
+    "LESSON_NOT_IN_COURSE": "Ta lekcja nie należy do wskazanego kursu.",
+    "AWARD_ALREADY_EXISTS_FOR_USER_EXERCISE": "Użytkownik otrzymał już nagrodę za to ćwiczenie.",
+    "AWARD_ALREADY_EXISTS_FOR_ATTEMPT": "Nagroda dla tej próby już istnieje.",
+    "ATTEMPT_USER_MISMATCH": "Próba nie należy do tego użytkownika.",
+    "ATTEMPT_EXERCISE_MISMATCH": "Próba nie dotyczy tego ćwiczenia.",
+    "ATTEMPT_NOT_MARKED_CORRECT": "Próba nie jest oznaczona jako poprawna.",
+    "TITLE_TAKEN": "Tytuł jest już zajęty.",
+    "TITLE_REQUIRED": "Tytuł jest wymagany.",
+    "CHAT_SESSION_CLOSED": "Ta sesja czatu została zamknięta.",
+    "UNAUTHORIZED": "Musisz być zalogowany.",
+    "FORBIDDEN": "Brak uprawnień.",
+    "TOO_MANY_REQUESTS": "Za dużo żądań.",
+    "AVATAR_INVALID_FORMAT": "Nieprawidłowy format obrazu.",
+    "AVATAR_UNSUPPORTED_TYPE": "Nieobsługiwany typ obrazu.",
+    "AVATAR_TOO_LARGE": "Obraz jest zbyt duży.",
+    "AVATAR_DIMENSIONS_TOO_SMALL": "Wymiary obrazu są zbyt małe.",
+    "AVATAR_DIMENSIONS_TOO_LARGE": "Wymiary obrazu są zbyt duże.",
+    "AVATAR_UPLOAD_INVALID": "Nie udało się przesłać avatara.",
+    "VALIDATION_FAILED": "Błąd walidacji.",
+    "BAD_REQUEST": "Nieprawidłowe dane.",
+    "CONFLICT": "Konflikt danych.",
+    "NOT_ENROLLED": "Nie jesteś zapisany na ten kurs.",
+    "ALREADY_EARNED": "To osiągnięcie jest już przyznane.",
+    "CODE_REQUIRED": "Kod jest wymagany.",
+    "AI_DISABLED": "Funkcja AI jest wyłączona.",
+    "AI_CHAT_DISABLED": "Czat AI jest wyłączony.",
+    "AI_GRADING_DISABLED": "Ocenianie AI jest wyłączone.",
+    "AI_EXERCISES_DISABLED": "Generator ćwiczeń AI jest wyłączony.",
+    "INVALID_REFRESH_TOKEN": "Nieprawidłowy refresh token.",
+    "TYPE_REQUIRED": "Typ jest wymagany.",
+    "DIFFICULTY_REQUIRED": "Trudność jest wymagana.",
+    "ORDER_NUMBER_REQUIRED": "Numer porządkowy jest wymagany.",
+    "PASSING_SCORE_NOT_ALLOWED": "Próg zaliczenia nie jest dozwolony dla tego typu.",
+    "MESSAGE_REQUIRED": "Wiadomość jest wymagana.",
+    "LOGIN_EMAIL_CONFLICT": "Login lub e-mail jest już zajęty.",
+    "AVATAR_EMPTY": "Nie przesłano pliku.",
+    "NOT_FOUND": "Nie znaleziono.",
+    "INVALID_DAYS": "Nieprawidłowa liczba dni"
+  },
+  "dashboard": {
+    "hello": "Cześć",
+    "level": "Poziom",
+    "streak": "Streak",
+    "continue": "Kontynuuj naukę",
+    "tiles": {
+      "reviews": {
+        "title": "Powtórki na dziś",
+        "hint": "Liczba elementów, których termin przypada dziś (liczone o północy).",
+        "help": "Kliknij, aby rozpocząć",
+        "cta": "Przejdź do powtórek"
+      },
+      "chat": {
+        "title": "Rozmowa",
+        "desc": "Ćwicz płynność z czatem",
+        "cta": "Otwórz czat"
+      },
+      "learn": {
+        "title": "Nauka",
+        "desc": "Wznów tam, gdzie skończyłeś",
+        "cta": "Wznów"
+      }
+    },
+    "achievements": {
+      "title": "Osiągnięcia",
+      "empty": "Brak nowych odznak."
+    },
+    "recommendation": {
+      "title": "Polecany kurs",
+      "cta": "Zobacz",
+      "empty": "Brak rekomendacji na teraz",
+      "score": "Wynik dopasowania: {score}"
+    },
+    "courses": {
+      "title": "Twoje kursy",
+      "seeAll": "Zobacz wszystkie",
+      "resume": "Wznów",
+      "empty": "Nie masz jeszcze aktywnych kursów.",
+      "browse": "Przeglądaj kursy"
+    },
+    "xp7d": {
+      "title": "XP – ostatnie 7 dni",
+      "empty": "Brak danych."
+    },
+    "errors": {
+      "fetch": "Nie udało się pobrać danych."
+    }
+  },
+  "coursesList": {
+    "title": "Kursy",
+    "details": "Szczegóły",
+    "empty": "Brak kursów.",
+    "errorFetch": "Nie udało się pobrać kursów.",
+    "progress": "Postęp",
+    "learningLang": "Język nauki",
+    "supportLang": "Język pomocniczy",
+    "completed": "Ukończony",
+    "inProgress": "W trakcie",
+    "errorFetchMy": "Nie udało się pobrać Twoich danych o kursach."
+  },
+  "courseDetail": {
+    "back": "Kursy",
+    "language": "Język",
+    "level": "Poziom",
+    "loginToEnroll": "Zaloguj, aby się zapisać",
+    "enroll": "Zapisz się",
+    "unenroll": "Wypisz się",
+    "enrollSuccess": "Zapisano na kurs.",
+    "unenrollSuccess": "Wypisano z kursu.",
+    "noDescription": "Brak opisu kursu.",
+    "lessons": "Lekcje",
+    "openLesson": "Otwórz lekcję",
+    "emptyLessons": "Brak lekcji w tym kursie.",
+    "notFound": "Nie znaleziono kursu.",
+    "enrollError": "Nie udało się zapisać na kurs.",
+    "unenrollError": "Nie udało się wypisać z kursu.",
+    "enrollRequired": "Zapisz się, aby otworzyć lekcje tego kursu.",
+    "learningLanguage": "Język nauki",
+    "supportLanguage": "Język pomocniczy"
+  },
+  "toast": {
+    "levelUp": "Osiągnąłeś poziom {level}",
+    "achievementUnlocked": "Odblokowano osiągnięcie"
+  },
+  "home": {
+    "title": "Ucz się języków z AI",
+    "subtitle": "Interaktywne kursy, inteligentne podpowiedzi i rozmowy z modelem językowym.",
+    "ctaStart": "Rozpocznij",
+    "ctaDashboard": "Przejdź do panelu",
+    "links": {
+      "browseCourses": "Przeglądaj kursy",
+      "chatMode": "Tryb rozmowy",
+      "stats": "Zobacz statystyki"
+    },
+    "badge": {
+      "new": "Nowość"
+    },
+    "featureTitle": "Ocena odpowiedzi przez AI",
+    "featureBody": "Otrzymuj natychmiastowe wskazówki, korekty i krótkie przykłady poprawnych odpowiedzi.",
+    "illustrationAlt": "Ilustracja AI",
+    "metrics": {
+      "courses": {
+        "title": "Kursy",
+        "subtitle": "Zadania i lekcje"
+      },
+      "hints": {
+        "title": "Podpowiedzi",
+        "subtitle": "W czasie rzeczywistym"
+      },
+      "chat": {
+        "title": "Rozmowy",
+        "subtitle": "Czat z AI"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+.container {
+  max-width: 1100px;
+}
+
+.obj-cover {
+  object-fit: cover;
+}
+
+.xsmall {
+  font-size: 0.8rem;
+}
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  flex-wrap: nowrap;
+}
+
+.stats-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-chart {
+  position: relative;
+  width: 100%;
+}
+
+.stats-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.stats-doughnut {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1060;
+}
+
+.toast-item {
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  min-width: 260px;
+  cursor: pointer;
+}
+
+.toast-item.success {
+  background: #198754;
+}
+
+.toast-item.error {
+  background: #dc3545;
+}

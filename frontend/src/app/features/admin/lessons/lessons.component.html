@@ -1,0 +1,165 @@
+<h5 class="mb-3">{{ 'admin.lessons.title' | t }}</h5>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-6">
+        <label class="form-label">{{ 'admin.lessons.course' | t }}</label>
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="selectedCourseId()"
+          (ngModelChange)="selectedCourseId.set($event); reload()">
+          <option [ngValue]="null">— {{ 'common.select' | t }} —</option>
+          <option *ngFor="let c of courses()" [ngValue]="c.id">
+            [{{ c.id }}] {{ c.title }} ({{ c.learningLanguageCode }} ← {{ c.fromLanguageCode }}, {{ c.levelCode }})
+          </option>
+        </select>
+      </div>
+      <div class="col text-end">
+        <button class="btn btn-primary btn-sm" [disabled]="!selectedCourseId()" (click)="addNew()">
+          + {{ 'admin.lessons.title' | t }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3" *ngIf="lessonsAll().length">
+  <div class="card-body">
+    <div class="row g-2 align-items-end">
+      <div class="col-6 col-md-3">
+        <label class="form-label">{{ 'admin.lessons.id' | t }}</label>
+        <input type="number" min="1" step="1" inputmode="numeric"
+               class="form-control form-control-sm"
+               [ngModel]="filterId()"
+               (ngModelChange)="onFilterIdChange($event)"
+               [placeholder]="'admin.lessons.id' | t"/>
+      </div>
+      <div class="col-6 col-md-5">
+        <label class="form-label">{{ 'admin.lessons.name' | t }}</label>
+        <input type="text"
+               class="form-control form-control-sm"
+               [ngModel]="filterTitle()"
+               (ngModelChange)="onFilterTitleChange($event)"
+               [placeholder]="'admin.lessons.name' | t"/>
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">{{ 'admin.lessons.order' | t }}</label>
+        <input type="number" min="1" step="1" inputmode="numeric"
+               class="form-control form-control-sm"
+               [ngModel]="filterOrder()"
+               (ngModelChange)="onFilterOrderChange($event)"
+               [placeholder]="'admin.lessons.order' | t"/>
+      </div>
+      <div class="col-6 col-md d-flex justify-content-end">
+        <button class="btn btn-light btn-sm" type="button" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="error()" class="alert alert-danger py-2">{{ (error() ?? '') | t }}</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2" *ngIf="totalElements()">
+  <div>
+    <span class="text-body-secondary">
+      {{ 'common.pagination' | t }}:
+      {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+    </span>
+    <div class="btn-group ms-2">
+      <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+      <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+    </div>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+    <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+            (change)="changeSize(+$any($event.target).value)">
+      <option [value]="5">5</option>
+      <option [value]="10">10</option>
+      <option [value]="20">20</option>
+      <option [value]="50">50</option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="loading()" class="text-center py-5">
+  <div class="spinner-border"></div>
+</div>
+
+<ng-template #emptyTpl>
+  <div class="empty-state">{{ 'admin.lessons.empty' | t }}</div>
+</ng-template>
+
+<ng-container *ngIf="!loading(); else emptyTpl">
+  <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('id')" style="cursor:pointer">{{ 'admin.lessons.id' | t }}
+            <span>{{ sortArrow('id') }}</span></th>
+          <th (click)="toggleSort('title')" style="cursor:pointer">{{ 'admin.lessons.name' | t }}
+            <span>{{ sortArrow('title') }}</span></th>
+          <th (click)="toggleSort('orderNumber')" style="cursor:pointer">{{ 'admin.lessons.order' | t }}
+            <span>{{ sortArrow('orderNumber') }}</span></th>
+          <th class="text-end">{{ 'common.actions' | t }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let l of pageRows(); trackBy: trackById">
+          <td>{{ l.id }}</td>
+          <td>{{ l.title }}</td>
+          <td>{{ l.orderNumber }}</td>
+          <td class="text-end">
+            <button class="btn btn-outline-primary btn-sm me-1" (click)="edit(l)">{{ 'common.edit' | t }}</button>
+            <button class="btn btn-outline-danger btn-sm" (click)="remove(l.id)">{{ 'common.delete' | t }}</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</ng-container>
+
+<div *ngIf="editingId() !== null" class="card mt-3">
+  <div class="card-header">
+    {{ isEdit() ? ('common.edit' | t) : ('common.add' | t) }} – {{ 'admin.lessons.title' | t }}
+    <span *ngIf="isEdit()">#{{ editingId() }}</span>
+  </div>
+  <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+    <label class="form-label" for="lsn-title">{{ 'admin.lessons.name' | t }}</label>
+    <input id="lsn-title" class="form-control" formControlName="title" [placeholder]="'admin.lessons.name' | t"
+           [class.is-invalid]="isInvalid('title')"/>
+    <div class="invalid-feedback d-block" *ngFor="let m of fieldErrors('title')">{{ m }}</div>
+
+    <label class="form-label" for="lsn-desc">{{ 'admin.lessons.description' | t }}</label>
+    <textarea id="lsn-desc" class="form-control" rows="3" formControlName="description"
+              [placeholder]="'admin.lessons.description' | t"
+              [class.is-invalid]="isInvalid('description')"></textarea>
+    <div class="invalid-feedback d-block" *ngFor="let m of fieldErrors('description')">{{ m }}</div>
+
+    <label class="form-label" for="lsn-order">{{ 'admin.lessons.order' | t }}</label>
+    <input id="lsn-order" type="number" class="form-control" formControlName="orderNumber"
+           [placeholder]="'admin.lessons.order' | t" min="1"
+           [class.is-invalid]="isInvalid('orderNumber')"/>
+    <div class="invalid-feedback d-block" *ngFor="let m of fieldErrors('orderNumber')">{{ m }}</div>
+
+    <div class="d-flex justify-content-end gap-2 mt-2">
+      <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+      <button class="btn btn-primary" [disabled]="form.invalid || !selectedCourseId()">{{ 'common.save' | t }}</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

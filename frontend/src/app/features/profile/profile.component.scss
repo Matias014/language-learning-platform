@@ -1,0 +1,151 @@
+.container {
+  max-width: 1100px;
+}
+
+.obj-cover {
+  object-fit: cover;
+}
+
+.profile-hero {
+  background: radial-gradient(
+      1200px 400px at -10% -50%,
+      rgba(230, 126, 34, 0.1),
+      transparent 60%
+  ),
+  linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+  border-bottom: 1px solid var(--bs-border-color);
+  padding: 1rem 1.25rem;
+}
+
+.profile-hero .subtitle {
+  color: var(--bs-secondary-color);
+}
+
+.avatar-wrap {
+  position: relative;
+}
+
+.avatar-wrap .avatar-img {
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  outline: 2px solid rgba(230, 126, 34, 0.35);
+}
+
+.card-footer .dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--bs-border-color);
+  display: inline-block;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.info-item {
+  border: 1px dashed var(--bs-border-color);
+  border-radius: 0.65rem;
+  padding: 0.75rem 0.85rem;
+  background: #fff;
+}
+
+.info-item .label {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+  margin-bottom: 0.25rem;
+}
+
+.info-item .value {
+  font-weight: 600;
+}
+
+.ach-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.ach-item {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.65rem;
+  background: #fff;
+  transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
+}
+
+.ach-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+.ach-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.08), rgba(230, 126, 34, 0.02));
+  border: 1px solid var(--bs-border-color);
+}
+
+.ach-meta .title {
+  font-weight: 600;
+}
+
+.xsmall {
+  font-size: 0.8rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(33, 37, 41, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 1050;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  width: min(520px, 92vw);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1060;
+}
+
+.toast-item {
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  min-width: 260px;
+  cursor: pointer;
+}
+
+.toast-item.success {
+  background: #198754;
+}
+
+.toast-item.error {
+  background: #dc3545;
+}

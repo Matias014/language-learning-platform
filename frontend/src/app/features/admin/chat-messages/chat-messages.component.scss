@@ -1,0 +1,40 @@
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6c757d;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1060;
+}
+
+.toast-item {
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  min-width: 260px;
+  cursor: pointer;
+}
+
+.toast-item.success {
+  background: #198754;
+}
+
+.toast-item.error {
+  background: #dc3545;
+}

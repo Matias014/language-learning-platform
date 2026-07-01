@@ -1,0 +1,185 @@
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h4 class="mb-0">{{ lessonTitle() || ('lessons.title' | t) }}</h4>
+    <div class="small text-muted">
+      {{ currentIdx() + 1 }} / {{ exercises().length }}
+    </div>
+  </div>
+
+  <div
+    class="progress mb-3"
+    role="progressbar"
+    [attr.aria-label]="('lessons.progressAria' | t)"
+    [attr.aria-valuenow]="progressPercent()"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <div class="progress-bar" [style.width.%]="progressPercent()">
+      {{ progressPercent() }}%
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loading(); else loadingTpl">
+    <ng-template [ngTemplateOutlet]="contentTpl"></ng-template>
+  </ng-container>
+
+  <ng-template #contentTpl>
+    <div *ngIf="current() as ex">
+      <app-quiz-exercise
+        *ngIf="ex.type === 'quiz'"
+        [exercise]="ex"
+        (answer)="submitAnswer(ex, $event)"
+        (askHint)="requestHint(ex, $event)"
+        (changed)="clearValidationError(ex)"
+      ></app-quiz-exercise>
+
+      <app-fill-in-exercise
+        *ngIf="ex.type === 'fill_in'"
+        [exercise]="ex"
+        (answer)="submitAnswer(ex, $event)"
+        (askHint)="requestHint(ex, $event)"
+        (changed)="clearValidationError(ex)"
+      ></app-fill-in-exercise>
+
+      <app-writing-exercise
+        *ngIf="ex.type === 'writing'"
+        [exercise]="ex"
+        (answer)="submitAnswer(ex, $event)"
+        (askHint)="requestHint(ex, $event)"
+        (changed)="clearValidationError(ex)"
+      ></app-writing-exercise>
+
+      <div class="d-flex justify-content-end mt-2">
+        <button
+          class="btn btn-outline-secondary btn-sm mb-2"
+          (click)="loadHistory(ex)"
+          [disabled]="ex.busy || ex.hintBusy"
+        >
+          {{ 'lessons.history' | t }}
+        </button>
+      </div>
+
+      <app-attempt-history
+        *ngIf="ex.history !== null"
+        [rows]="ex.history"
+      ></app-attempt-history>
+
+      <div *ngIf="ex.result" class="mt-3">
+        <div class="alert" [ngClass]="ex.result.correct ? 'alert-success' : 'alert-warning'">
+          <strong>
+            {{ ex.result.correct ? ('lessons.correct' | t) : ('lessons.tryAgain' | t) }}
+          </strong>
+          <div class="mt-1">{{ ex.result.feedback }}</div>
+          <ul *ngIf="ex.result.hints?.length" class="mt-2 mb-0 small">
+            <li *ngFor="let h of ex.result.hints">{{ h }}</li>
+          </ul>
+          <div *ngIf="ex.result.correct && ex.result.awardedXp == null" class="mt-2">
+            <span class="badge text-bg-secondary">
+              {{ 'lessons.completedNoXp' | t }}
+            </span>
+          </div>
+          <div *ngIf="ex.result.awardedXp != null" class="mt-2">
+            <span class="badge text-bg-success">
+              {{ 'lessons.awardedXp' | t:{xp: ex.result.awardedXp} }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!ex.result && ex.hintsOnly as ho" class="mt-3">
+        <div class="alert alert-info">
+          <div class="fw-semibold">{{ 'lessons.hintsTitle' | t }}</div>
+          <div class="mt-1">{{ ho.feedback }}</div>
+          <ul *ngIf="ho.hints?.length" class="mt-2 mb-0 small">
+            <li *ngFor="let h of ho.hints">{{ h }}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mt-3">
+        <button
+          class="btn btn-outline-secondary"
+          (click)="goto(currentIdx() - 1)"
+          [disabled]="currentIdx() === 0"
+        >
+          ← {{ 'lessons.previous' | t }}
+        </button>
+        <button
+          class="btn btn-outline-secondary"
+          (click)="goto(currentIdx() + 1)"
+          [disabled]="currentIdx() >= exercises().length - 1"
+        >
+          {{ 'lessons.next' | t }} →
+        </button>
+      </div>
+
+      <div *ngIf="allCompleted()" class="mt-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="mb-3">
+              {{ 'lessons.summaryTitle' | t:{title: (lessonTitle() || ('lessons.title' | t))} }}
+            </h5>
+            <div class="row g-3 text-center">
+              <div class="col-6 col-md-3">
+                <div class="small text-body-secondary">{{ 'lessons.summary.exercises' | t }}</div>
+                <div class="fs-5 fw-semibold">{{ exercises().length }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="small text-body-secondary">{{ 'lessons.summary.totalAttempts' | t }}</div>
+                <div class="fs-5 fw-semibold">{{ totalAttempts() }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="small text-body-secondary">{{ 'lessons.summary.hints' | t }}</div>
+                <div class="fs-5 fw-semibold">{{ totalHints() }}</div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="small text-body-secondary">{{ 'lessons.summary.time' | t }}</div>
+                <div class="fs-5 fw-semibold">{{ formatDuration(totalDurationSeconds()) }}</div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <span class="badge text-bg-success me-2">
+                {{ 'lessons.summary.totalXp' | t:{xp: totalAwardedXp()} }}
+              </span>
+              <span class="badge text-bg-secondary" *ngIf="exercises().length">
+                {{ 'lessons.summary.avgAttemptsPerExercise' | t }}: {{ avgAttemptsPerExercise() | number:'1.0-2' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #loadingTpl>
+    <div class="text-center py-5">
+      <div class="spinner-border"></div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    [class.info]="t.type === 'info'"
+    (click)="dismissToast(t.id)"
+  >
+    <ng-container [ngSwitch]="t.key">
+      <ng-container *ngSwitchCase="'toast.achievementUnlocked'">
+        <div class="toast-ach">
+          <img *ngIf="t.params?.iconPath" class="toast-icon" [src]="$any(t.params)?.iconPath" alt=""/>
+          <div class="toast-content">
+            <div class="toast-title">{{ t.params?.title }}</div>
+            <div class="toast-desc" *ngIf="t.params?.description">{{ t.params?.description }}</div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        {{ t.key | t: t.params }}
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

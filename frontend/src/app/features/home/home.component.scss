@@ -1,0 +1,68 @@
+.hero {
+  padding: 72px 0 56px;
+  background: radial-gradient(1200px 600px at 10% -20%, rgba(13, 110, 253, 0.06) 0, transparent 60%),
+  radial-gradient(800px 400px at 100% 0, rgba(111, 66, 193, 0.06) 0, transparent 70%),
+  linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.hero-inner {
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+  font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-size: clamp(16px, 2.1vw, 18px);
+  margin: 0 auto 24px;
+  max-width: 720px;
+}
+
+.cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.features {
+  padding: 36px 0 56px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 992px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 20px 18px;
+}
+
+.feature-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.feature-sub {
+  color: #6c757d;
+  font-size: 0.95rem;
+}

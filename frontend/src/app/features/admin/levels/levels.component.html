@@ -1,0 +1,150 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ 'admin.levels.title' | t }}</h5>
+    <button class="btn btn-primary btn-sm" (click)="addNew()">{{ 'common.add' | t }}</button>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="lvl-min" class="form-label">{{ 'admin.levels.level' | t }}</label>
+          <input id="lvl-min" type="number" class="form-control form-control-sm"
+                 [ngModel]="filterMinLevel()"
+                 (ngModelChange)="onMinLevelChange($event)" min="1"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="xp-min" class="form-label">{{ 'admin.levels.requiredXp' | t }}</label>
+          <input id="xp-min" type="number" class="form-control form-control-sm"
+                 [ngModel]="filterMinXp()"
+                 (ngModelChange)="onMinXpChange($event)" min="0"/>
+        </div>
+        <div class="col-md d-flex justify-content-end">
+          <button class="btn btn-light btn-sm" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.levels.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('level')" style="cursor:pointer">{{ 'admin.levels.level' | t }}
+              <span>{{ sortArrow('level') }}</span></th>
+            <th (click)="toggleSort('requiredXp')" style="cursor:pointer">{{ 'admin.levels.requiredXp' | t }}
+              <span>{{ sortArrow('requiredXp') }}</span></th>
+            <th class="text-end">{{ 'common.actions' | t }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let l of pageRows(); trackBy: trackByLevel">
+            <td>{{ l.level }}</td>
+            <td>{{ l.requiredXp }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(l)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(l)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <div *ngIf="editingLevel() !== null" class="card mt-3">
+      <div class="card-header">
+        {{ isCreate() ? ('common.add' | t) : ('common.edit' | t) }} – {{ 'admin.levels.title' | t }}
+        <span *ngIf="!isCreate()">#{{ editingLevel() }}</span>
+      </div>
+
+      <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label" for="lvl-level">{{ 'admin.levels.level' | t }}</label>
+            <input id="lvl-level" type="number" class="form-control" formControlName="level" min="1"
+                   [placeholder]="'admin.levels.level' | t"/>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.level.touched && form.controls.level.hasError('required')">
+              {{ 'validation.required' | t }}
+            </div>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.level.touched && form.controls.level.hasError('min')">
+              {{ 'validation.min' | t: {min: 1} }}
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="form.controls.level.errors?.['server'] as errs">
+              <div *ngFor="let m of errs">{{ m }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="lvl-xp">{{ 'admin.levels.requiredXp' | t }}</label>
+            <input id="lvl-xp" type="number" class="form-control" formControlName="requiredXp" min="0"
+                   [placeholder]="'admin.levels.requiredXp' | t"/>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.requiredXp.touched && form.controls.requiredXp.hasError('required')">
+              {{ 'validation.required' | t }}
+            </div>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.requiredXp.touched && form.controls.requiredXp.hasError('min')">
+              {{ 'validation.min' | t: {min: 0} }}
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="form.controls.requiredXp.errors?.['server'] as errs">
+              <div *ngFor="let m of errs">{{ m }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-2">
+          <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+          <button class="btn btn-primary" [disabled]="form.invalid">{{ 'common.save' | t }}</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

@@ -1,0 +1,172 @@
+<div class="auth-lang text-end">
+  <app-lang-switcher></app-lang-switcher>
+</div>
+
+<div class="auth-card">
+  <div class="card shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="card-title mb-3 text-center">{{ 'auth.register.title' | t }}</h5>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="loginInput">{{ 'auth.common.login' | t }}</label>
+            <input
+              id="loginInput"
+              class="form-control"
+              formControlName="login"
+              [class.is-invalid]="submitted() && loginCtrl.invalid"
+              autocomplete="username"
+            />
+            <div *ngIf="submitted() && loginCtrl.hasError('required')" class="invalid-feedback d-block">
+              {{ 'validation.required' | t }}
+            </div>
+            <div *ngIf="submitted() && loginCtrl.hasError('minlength')" class="invalid-feedback d-block">
+              {{ 'auth.register.validation.loginMin' | t }}
+            </div>
+            <div *ngIf="submitted() && loginCtrl.hasError('maxlength')" class="invalid-feedback d-block">
+              {{ 'validation.maxLength' | t: {max: 64} }}
+            </div>
+            <div *ngIf="submitted() && loginCtrl.hasError('pattern')" class="invalid-feedback d-block">
+              {{ 'auth.register.validation.loginPattern' | t }}
+            </div>
+            <div *ngIf="submitted() && loginCtrl.hasError('server')" class="invalid-feedback d-block">
+              {{ loginCtrl.getError('server')?.[0] }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="emailInput">{{ 'auth.common.email' | t }}</label>
+            <input
+              id="emailInput"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              [class.is-invalid]="submitted() && emailCtrl.invalid"
+              autocomplete="email"
+            />
+            <div *ngIf="submitted() && emailCtrl.hasError('required')" class="invalid-feedback d-block">
+              {{ 'validation.required' | t }}
+            </div>
+            <div *ngIf="submitted() && emailCtrl.hasError('email')" class="invalid-feedback d-block">
+              {{ 'validation.email' | t }}
+            </div>
+            <div *ngIf="submitted() && emailCtrl.hasError('maxlength')" class="invalid-feedback d-block">
+              {{ 'validation.maxLength' | t: {max: 255} }}
+            </div>
+            <div *ngIf="submitted() && emailCtrl.hasError('server')" class="invalid-feedback d-block">
+              {{ emailCtrl.getError('server')?.[0] }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="passwordInput">{{ 'auth.common.password' | t }}</label>
+            <input
+              id="passwordInput"
+              type="password"
+              class="form-control"
+              formControlName="password"
+              [class.is-invalid]="submitted() && passwordCtrl.invalid"
+              autocomplete="new-password"
+            />
+            <div *ngIf="submitted() && passwordCtrl.hasError('required')" class="invalid-feedback d-block">
+              {{ 'validation.required' | t }}
+            </div>
+            <div *ngIf="submitted() && passwordCtrl.hasError('minlength')" class="invalid-feedback d-block">
+              {{ 'auth.register.validation.passwordMin' | t }}
+            </div>
+            <div *ngIf="submitted() && passwordCtrl.hasError('maxlength')" class="invalid-feedback d-block">
+              {{ 'validation.maxLength' | t: {max: 255} }}
+            </div>
+            <div *ngIf="submitted() && passwordCtrl.hasError('server')" class="invalid-feedback d-block">
+              {{ passwordCtrl.getError('server')?.[0] }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="confirmInput">{{ 'auth.register.confirmPassword' | t }}</label>
+            <input
+              id="confirmInput"
+              type="password"
+              class="form-control"
+              formControlName="confirm"
+              [class.is-invalid]="submitted() && form.hasError('mismatch')"
+              autocomplete="new-password"
+            />
+            <div *ngIf="submitted() && form.hasError('mismatch')" class="invalid-feedback d-block">
+              {{ 'auth.register.validation.passwordMismatch' | t }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="nameInput">{{ 'auth.register.name' | t }}</label>
+            <input
+              id="nameInput"
+              class="form-control"
+              formControlName="name"
+              [class.is-invalid]="submitted() && nameCtrl.invalid"
+              autocomplete="given-name"
+            />
+            <div *ngIf="submitted() && nameCtrl.hasError('required')" class="invalid-feedback d-block">
+              {{ 'validation.required' | t }}
+            </div>
+            <div *ngIf="submitted() && nameCtrl.hasError('maxlength')" class="invalid-feedback d-block">
+              {{ 'validation.maxLength' | t: {max: 100} }}
+            </div>
+            <div *ngIf="submitted() && nameCtrl.hasError('server')" class="invalid-feedback d-block">
+              {{ nameCtrl.getError('server')?.[0] }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="surnameInput">{{ 'auth.register.surname' | t }}</label>
+            <input
+              id="surnameInput"
+              class="form-control"
+              formControlName="surname"
+              [class.is-invalid]="submitted() && surnameCtrl.invalid"
+              autocomplete="family-name"
+            />
+            <div *ngIf="submitted() && surnameCtrl.hasError('required')" class="invalid-feedback d-block">
+              {{ 'validation.required' | t }}
+            </div>
+            <div *ngIf="submitted() && surnameCtrl.hasError('maxlength')" class="invalid-feedback d-block">
+              {{ 'validation.maxLength' | t: {max: 100} }}
+            </div>
+            <div *ngIf="submitted() && surnameCtrl.hasError('server')" class="invalid-feedback d-block">
+              {{ surnameCtrl.getError('server')?.[0] }}
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100 mt-3" type="submit" [disabled]="loading()">
+          <span *ngIf="!loading()">{{ 'auth.register.submit' | t }}</span>
+          <span *ngIf="loading()" class="spinner-border spinner-border-sm"></span>
+        </button>
+
+        <div *ngIf="error()" class="alert alert-danger mt-3">{{ error() }}</div>
+
+        <div class="text-center mt-3">
+          <span class="text-body-secondary small">{{ 'auth.register.haveAccount' | t }}</span>
+          <a routerLink="/login" class="small ms-1">{{ 'auth.register.loginCta' | t }}</a>
+        </div>
+
+        <div class="text-center mt-3">
+          <a class="btn btn-outline-secondary btn-sm" routerLink="/home">{{ 'common.goHome' | t }}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="container py-3">
+  <h5 class="mb-3">{{ 'admin.chatMessages.title' | t }}</h5>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">{{ 'admin.chatMessages.sessionId' | t }}</label>
+          <input type="number" class="form-control"
+                 [ngModel]="sessionId()"
+                 (ngModelChange)="onSessionIdChange($event)"
+                 min="1" step="1" inputmode="numeric"/>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">{{ 'common.search' | t }}</label>
+          <input class="form-control" [ngModel]="q()" (ngModelChange)="onQueryChange($event)"/>
+        </div>
+        <div class="col-md d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-light" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+          <button type="button" class="btn btn-primary" (click)="reload()">{{ 'common.reload' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width: auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else tableTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #tableTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.chatMessages.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('sessionId')" style="cursor:pointer">{{ 'admin.chatMessages.sessionId' | t }}
+              <span>{{ sortArrow('sessionId') }}</span></th>
+            <th (click)="toggleSort('sender')" style="cursor:pointer">{{ 'admin.chatMessages.sender' | t }}
+              <span>{{ sortArrow('sender') }}</span></th>
+            <th (click)="toggleSort('message')" style="cursor:pointer">{{ 'admin.chatMessages.message' | t }}
+              <span>{{ sortArrow('message') }}</span></th>
+            <th (click)="toggleSort('sentAt')" style="cursor:pointer">{{ 'admin.chatMessages.sentAt' | t }}
+              <span>{{ sortArrow('sentAt') }}</span></th>
+            <th class="text-end">{{ 'common.actions' | t }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let m of pageRows(); trackBy: trackById">
+            <td>{{ m.id }}</td>
+            <td>{{ m.sessionId }}</td>
+            <td class="text-uppercase">{{ m.sender }}</td>
+            <td class="text-truncate" style="max-width: 520px">{{ m.message }}</td>
+            <td>{{ m.sentAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(m.id)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

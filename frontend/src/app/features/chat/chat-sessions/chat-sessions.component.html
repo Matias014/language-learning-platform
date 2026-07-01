@@ -1,0 +1,94 @@
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h4 class="mb-0">{{ 'chat.list.title' | t }}</h4>
+    <a routerLink="/home" class="btn btn-light">{{ 'chat.list.home' | t }}</a>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex gap-2 align-items-start flex-wrap">
+        <div class="flex-grow-1">
+          <input
+            class="form-control"
+            [placeholder]="'chat.list.titlePlaceholder' | t"
+            [ngModel]="title()"
+            (ngModelChange)="title.set($event)"
+            [class.is-invalid]="(submitted() && !title().trim()) || !!titleError()"
+          />
+          <div *ngIf="titleError()" class="invalid-feedback d-block">
+            {{ titleError() }}
+          </div>
+        </div>
+        <div style="min-width:220px">
+          <select class="form-select" [ngModel]="selectedLang()" (ngModelChange)="selectedLang.set($event)">
+            <option value="">{{ 'lang.switch' | t }}: {{ 'chat.lang.auto' | t }}</option>
+            <option *ngFor="let l of languages()" [value]="l.code">
+              {{ l.name }}
+            </option>
+          </select>
+        </div>
+        <button class="btn btn-primary" (click)="create()" [disabled]="!title().trim()">
+          {{ 'chat.list.new' | t }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loading(); else loadTpl">
+    <div class="row g-3" *ngIf="items().length; else emptyTpl">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let s of items()">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <div class="fw-semibold mb-1 text-truncate">
+              {{ s.title || ('chat.session.untitled' | t) }}
+            </div>
+            <div class="mt-auto d-flex gap-2 align-items-center flex-wrap">
+              <a class="btn btn-primary btn-sm" [routerLink]="['/chat','sessions',s.id]">
+                {{ 'chat.list.open' | t }}
+              </a>
+
+              <ng-container *ngIf="confirmId() === s.id; else delBtnTpl">
+                <div class="confirm-inline">
+                  <span class="me-1">{{ 'common.areYouSure' | t }}</span>
+                  <button class="btn btn-danger btn-sm" (click)="confirmRemove(s.id)">
+                    {{ 'chat.list.delete' | t }}
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm" (click)="cancelRemove()">
+                    {{ 'common.cancel' | t }}
+                  </button>
+                </div>
+              </ng-container>
+              <ng-template #delBtnTpl>
+                <button class="btn btn-outline-danger btn-sm" (click)="removeRequest(s.id)">
+                  {{ 'chat.list.delete' | t }}
+                </button>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'chat.list.empty' | t }}</div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #loadTpl>
+    <div class="text-center py-5">
+      <div class="spinner-border"></div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

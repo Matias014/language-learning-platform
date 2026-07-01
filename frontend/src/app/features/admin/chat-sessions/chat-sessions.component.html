@@ -1,0 +1,113 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ "admin.chatSessions.title" | t }}</h5>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label">{{ "admin.chatSessions.userId" | t }}</label>
+          <input type="number" min="1" step="1" inputmode="numeric" class="form-control form-control-sm"
+                 [ngModel]="filterUserId()"
+                 (ngModelChange)="filterUserId.set($event ? +$event : null)"/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label">{{ "common.search" | t }}</label>
+          <input class="form-control form-control-sm"
+                 [ngModel]="q()"
+                 (ngModelChange)="q.set($event || '')"/>
+        </div>
+        <div class="col-12 col-md d-flex justify-content-end gap-2">
+          <button class="btn btn-light btn-sm" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+          <button class="btn btn-primary btn-sm" (click)="reload()">{{ 'common.reload' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select class="form-select form-select-sm" style="width:auto" [value]="size()"
+              (change)="changeSize(+$any($event.target).value)">
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else tableTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #tableTpl>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('id')" style="cursor:pointer">ID <span>{{ sortArrow('id') }}</span></th>
+          <th (click)="toggleSort('title')" style="cursor:pointer">{{ "admin.chatSessions.titleCol" | t }}
+            <span>{{ sortArrow('title') }}</span></th>
+          <th (click)="toggleSort('userId')" style="cursor:pointer">{{ "admin.chatSessions.user" | t }}
+            <span>{{ sortArrow('userId') }}</span></th>
+          <th (click)="toggleSort('conversationLanguageCode')" style="cursor:pointer">{{ "chat.session.language" | t }}
+            <span>{{ sortArrow('conversationLanguageCode') }}</span></th>
+          <th (click)="toggleSort('startedAt')" style="cursor:pointer">{{ "admin.chatSessions.startedAt" | t }}
+            <span>{{ sortArrow('startedAt') }}</span></th>
+          <th class="text-end">{{ "common.actions" | t }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let s of pageRows(); trackBy: trackById">
+          <td>{{ s.id }}</td>
+          <td class="text-truncate" style="max-width: 320px">{{ s.title || "-" }}</td>
+          <td>{{ s.userId }}</td>
+          <td>{{ s.conversationLanguageCode || '—' }}</td>
+          <td>{{ s.startedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-secondary me-1"
+               [routerLink]="['/admin/chat-messages']"
+               [queryParams]="{ sessionId: s.id }">
+              {{ "admin.chatSessions.viewMessages" | t }}
+            </a>
+            <button class="btn btn-sm btn-outline-danger" (click)="remove(s.id)">
+              {{ "common.delete" | t }}
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!totalElements()" class="text-center fw-bold text-body-secondary py-4">
+      {{ "admin.chatSessions.empty" | t }}
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.container {
+  max-width: 1100px;
+}
+
+.obj-cover {
+  object-fit: cover;
+}
+
+.badge-tile {
+  width: 90px;
+  text-align: center;
+}
+
+.badge-icon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin-inline: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px #dee2e6;
+}
+
+.quick-tile {
+  border-radius: 0.75rem;
+  transition: transform 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1060;
+}
+
+.toast-item {
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  min-width: 260px;
+  cursor: pointer;
+}
+
+.toast-item.success {
+  background: #198754;
+}
+
+.toast-item.error {
+  background: #dc3545;
+}

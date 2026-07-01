@@ -1,0 +1,207 @@
+<div class="container py-4">
+  <ng-container *ngIf="loading(); else loaded">
+    <div class="placeholder-glow">
+      <div class="card mb-3">
+        <div class="card-body"><span class="placeholder col-6"></span></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body"><span class="placeholder col-8"></span></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body"><span class="placeholder col-8"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loaded>
+    <div *ngIf="error()" class="alert alert-danger">{{ error() | t }}</div>
+
+    <div *ngIf="data() as d">
+      <div class="card mb-3">
+        <div class="card-body d-flex align-items-center justify-content-between gap-3 flex-wrap">
+          <div class="d-flex align-items-center gap-3">
+            <img
+              [src]="avatarSrc()"
+              (error)="onAvatarError($event)"
+              class="rounded-circle obj-cover"
+              width="56"
+              height="56"
+              alt="avatar"
+            />
+            <div>
+              <div class="fw-semibold">{{ 'dashboard.hello' | t }}, {{ username() }}!</div>
+              <div class="small text-body-secondary">
+                {{ 'dashboard.level' | t }} {{ levelDisplay() }} • {{ totalXpDisplay() }} XP
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" (click)="continue()">{{ 'dashboard.continue' | t }}</button>
+        </div>
+        <div class="progress rounded-0">
+          <div class="progress-bar" [style.width.%]="barPercent()"></div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <div class="card h-100 quick-tile border-primary-subtle">
+            <div class="card-body d-flex flex-column">
+              <div class="fw-semibold mb-1">{{ 'dashboard.tiles.reviews.title' | t }}</div>
+              <div class="display-6">{{ srsDueToday() }}</div>
+              <div
+                class="small text-body-secondary mb-3"
+                [attr.title]="'dashboard.tiles.reviews.hint' | t:{count: d.srsSummary?.dueNext7DaysCount}"
+              >
+                {{ 'dashboard.tiles.reviews.help' | t }}
+              </div>
+              <a class="btn btn-outline-primary mt-auto btn-sm" routerLink="/srs">
+                {{ 'dashboard.tiles.reviews.cta' | t }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 quick-tile">
+            <div class="card-body d-flex flex-column">
+              <div class="fw-semibold mb-1">{{ 'dashboard.tiles.chat.title' | t }}</div>
+              <div class="small text-body-secondary mb-3">{{ 'dashboard.tiles.chat.desc' | t }}</div>
+              <a class="btn btn-outline-secondary mt-auto btn-sm" routerLink="/chat/sessions">
+                {{ 'dashboard.tiles.chat.cta' | t }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 quick-tile">
+            <div class="card-body d-flex flex-column">
+              <div class="fw-semibold mb-1">{{ 'dashboard.tiles.learn.title' | t }}</div>
+              <div class="small text-body-secondary mb-3">{{ 'dashboard.tiles.learn.desc' | t }}</div>
+              <button class="btn btn-outline-success mt-auto btn-sm" (click)="continue()">
+                {{ 'dashboard.tiles.learn.cta' | t }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="fw-semibold mb-2">{{ 'dashboard.achievements.title' | t }}</div>
+              <div class="d-flex gap-3 align-items-center flex-wrap">
+                <ng-container *ngIf="d.recentAchievements?.length; else noBadges">
+                  <ng-container *ngFor="let a of d.recentAchievements">
+                    <div class="badge-tile">
+                      <img class="badge-icon" [src]="a.iconPath || 'assets/logo.svg'" width="40" height="40" alt=""/>
+                      <div class="small mt-1 text-truncate" [title]="a.title">{{ a.title }}</div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noBadges>
+                  <div class="text-body-secondary small">{{ 'dashboard.achievements.empty' | t }}</div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="fw-semibold mb-2">{{ 'dashboard.recommendation.title' | t }}</div>
+              <ng-container *ngIf="recommendation() as rec; else noRec">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="me-3">
+                    <div class="fw-semibold">{{ rec.course.title }}</div>
+                    <div class="small text-body-secondary">
+                      {{ 'dashboard.recommendation.score' | t:{score: rec.score} }}
+                    </div>
+                  </div>
+                  <a class="btn btn-sm btn-primary" [routerLink]="['/courses', rec.course.id]">
+                    {{ 'dashboard.recommendation.cta' | t }}
+                  </a>
+                </div>
+              </ng-container>
+              <ng-template #noRec>
+                <div class="text-body-secondary small">{{ 'dashboard.recommendation.empty' | t }}</div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="fw-semibold">{{ 'dashboard.courses.title' | t }}</div>
+            <a class="small" routerLink="/courses">{{ 'dashboard.courses.seeAll' | t }}</a>
+          </div>
+
+          <div class="row g-3" *ngIf="d.enrollments?.length; else noCourses">
+            <div class="col-md-4" *ngFor="let e of d.enrollments; trackBy: trackByEnrollment">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="fw-semibold mb-1">{{ e.courseTitle }}</div>
+                  <div class="progress mb-2" style="height: 6px">
+                    <div class="progress-bar" [style.width.%]="clampPercent(e.progressPercent ?? 0)"></div>
+                  </div>
+                  <a
+                    class="btn btn-sm btn-primary"
+                    [routerLink]="e.currentLessonId ? ['/lessons', e.currentLessonId] : ['/courses', e.courseId]"
+                  >
+                    {{ 'dashboard.courses.resume' | t }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noCourses>
+            <div class="text-body-secondary small">
+              {{ 'dashboard.courses.empty' | t }}
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">{{ 'dashboard.xp7d.title' | t }}</div>
+          <div class="row row-cols-1 row-cols-md-2 g-2" *ngIf="(d.xp7d?.length ?? 0) > 0; else noXp">
+            <div class="col" *ngFor="let p of d.xp7d!; trackBy: trackByDate">
+              <div class="d-flex justify-content-between small text-body-secondary">
+                <span>{{ p.date }}</span><span>{{ p.xp }} XP</span>
+              </div>
+              <div class="progress" style="height: 6px">
+                <div class="progress-bar" [style.width.%]="xpPercent(p)"></div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noXp>
+            <div class="text-body-secondary small">{{ 'dashboard.xp7d.empty' | t }}</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>

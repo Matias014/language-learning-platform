@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow-sm">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/home">
+      <img src="assets/logo.svg" alt="" width="28" height="28"/>
+      <span class="fw-semibold">LangSchool</span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNav"
+      aria-controls="mainNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="isAuth(); else guestLinks">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            {{ 'nav.dashboard' | t }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/courses" routerLinkActive="active">
+            {{ 'nav.courses' | t }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/srs" routerLinkActive="active">
+            {{ 'nav.reviews' | t }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/chat/sessions" routerLinkActive="active">
+            {{ 'nav.chat' | t }}
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="role() === 'admin'">
+          <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+            {{ 'nav.admin' | t }}
+          </a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2" *ngIf="isAuth(); else authCta">
+        <app-lang-switcher class="me-1"></app-lang-switcher>
+        <div class="dropdown">
+          <button class="btn btn-light btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+              [src]="avatarPath() || 'assets/avatar.svg'"
+              (error)="onAvatarError($event)"
+              alt=""
+              class="rounded-circle obj-cover"
+              width="28"
+              height="28"
+            />
+            <span class="d-none d-sm-inline">{{ username() }}</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" routerLink="/profile">{{ 'nav.profile' | t }}</a>
+            </li>
+            <li>
+              <hr class="dropdown-divider"/>
+            </li>
+            <li>
+              <button class="dropdown-item text-danger" (click)="logout()">
+                {{ 'nav.logout' | t }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <ng-template #authCta>
+        <div class="d-flex align-items-center gap-2">
+          <app-lang-switcher class="me-1"></app-lang-switcher>
+          <a class="btn btn-outline-primary btn-sm" routerLink="/login">
+            {{ 'nav.login' | t }}
+          </a>
+          <a class="btn btn-primary btn-sm" routerLink="/register">
+            {{ 'nav.register' | t }}
+          </a>
+        </div>
+      </ng-template>
+
+      <ng-template #guestLinks>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/courses" routerLinkActive="active">
+              {{ 'nav.courses' | t }}
+            </a>
+          </li>
+        </ul>
+      </ng-template>
+    </div>
+  </div>
+</nav>

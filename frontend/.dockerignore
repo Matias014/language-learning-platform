@@ -1,0 +1,13 @@
+.git
+node_modules
+dist
+.angular
+coverage
+playwright-report
+test-results
+.idea
+.vscode
+.env
+.env.local
+.env.production
+*.log

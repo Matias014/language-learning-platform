@@ -1,0 +1,10 @@
+.git
+target
+.idea
+.vscode
+.env
+secrets.properties
+logs
+uploads
+photos/avatars
+*.log

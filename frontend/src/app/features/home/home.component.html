@@ -1,0 +1,40 @@
+<div class="home">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <h1 class="title">{{ 'home.title' | t }}</h1>
+        <p class="subtitle">{{ 'home.subtitle' | t }}</p>
+        <div class="cta">
+          <button class="btn btn-primary btn-lg" (click)="goPrimary()">
+            {{ loggedIn() ? ('home.ctaDashboard' | t) : ('home.ctaStart' | t) }}
+          </button>
+          <a class="btn btn-outline-primary btn-lg" routerLink="/courses">
+            {{ 'home.links.browseCourses' | t }}
+          </a>
+          <a class="btn btn-outline-secondary btn-lg" routerLink="/chat/sessions">
+            {{ 'home.links.chatMode' | t }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-title">{{ 'home.metrics.courses.title' | t }}</div>
+          <div class="feature-sub">{{ 'home.metrics.courses.subtitle' | t }}</div>
+        </div>
+        <div class="feature">
+          <div class="feature-title">{{ 'home.metrics.hints.title' | t }}</div>
+          <div class="feature-sub">{{ 'home.metrics.hints.subtitle' | t }}</div>
+        </div>
+        <div class="feature">
+          <div class="feature-title">{{ 'home.metrics.chat.title' | t }}</div>
+          <div class="feature-sub">{{ 'home.metrics.chat.subtitle' | t }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

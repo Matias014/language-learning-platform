@@ -1,0 +1,268 @@
+<div class="container py-3">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">{{ 'admin.courses.title' | t }}</h5>
+    <button class="btn btn-primary btn-sm" (click)="addNew()">{{ 'common.add' | t }}</button>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label" for="crs-learning">{{ 'admin.courses.language' | t }}</label>
+          <select
+            id="crs-learning"
+            class="form-select form-select-sm"
+            [ngModel]="filterLearning()"
+            (ngModelChange)="filterLearning.set($event || ''); applyFilters()"
+          >
+            <option value="">{{ 'common.all' | t }}</option>
+            <option *ngFor="let o of learningOptions()" [value]="o">{{ o }}</option>
+          </select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label" for="crs-from">{{ 'admin.courses.source' | t }}</label>
+          <select
+            id="crs-from"
+            class="form-select form-select-sm"
+            [ngModel]="filterFrom()"
+            (ngModelChange)="filterFrom.set($event || ''); applyFilters()"
+          >
+            <option value="">{{ 'common.all' | t }}</option>
+            <option *ngFor="let o of fromOptions()" [value]="o">{{ o }}</option>
+          </select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label" for="crs-level">{{ 'admin.courses.level' | t }}</label>
+          <select
+            id="crs-level"
+            class="form-select form-select-sm"
+            [ngModel]="filterLevel()"
+            (ngModelChange)="filterLevel.set($event || ''); applyFilters()"
+          >
+            <option value="">{{ 'common.all' | t }}</option>
+            <option *ngFor="let o of levelOptions()" [value]="o">{{ o }}</option>
+          </select>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label class="form-label" for="crs-title">{{ 'admin.courses.titleCol' | t }}</label>
+          <input
+            id="crs-title"
+            class="form-control form-control-sm"
+            [ngModel]="filterTitle()"
+            (ngModelChange)="filterTitle.set(($event ?? '').toString()); applyFilters()"
+            [placeholder]="'admin.courses.titleCol' | t"
+          />
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+          <button class="btn btn-light btn-sm" (click)="clearFilters()">{{ 'common.clear' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error()" class="alert alert-danger">{{ (error() ?? '') | t }}</div>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="text-body-secondary">
+        {{ 'common.pagination' | t }}:
+        {{ page() + 1 }} / {{ totalPages() || 1 }} • {{ totalElements() }} {{ 'common.total' | t }}
+      </span>
+      <div class="btn-group ms-2">
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canPrev()" (click)="prev()">&laquo;</button>
+        <button class="btn btn-sm btn-outline-secondary" [disabled]="!canNext()" (click)="next()">&raquo;</button>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <label class="form-label m-0">{{ 'common.pageSize' | t }}</label>
+      <select
+        class="form-select form-select-sm"
+        style="width: auto"
+        [value]="size()"
+        (change)="changeSize(+$any($event.target).value)"
+      >
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading(); else listTpl" class="text-center py-5">
+    <div class="spinner-border"></div>
+  </div>
+
+  <ng-template #listTpl>
+    <ng-template #emptyTpl>
+      <div class="empty-state">{{ 'admin.courses.empty' | t }}</div>
+    </ng-template>
+
+    <ng-container *ngIf="(pageRows()?.length || 0) > 0; else emptyTpl">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+          <tr>
+            <th (click)="toggleSort('id')" style="cursor: pointer">ID <span>{{ sortArrow('id') }}</span></th>
+            <th (click)="toggleSort('learningLanguageCode')" style="cursor: pointer">
+              {{ 'admin.courses.language' | t }} <span>{{ sortArrow('learningLanguageCode') }}</span>
+            </th>
+            <th (click)="toggleSort('fromLanguageCode')" style="cursor: pointer">
+              {{ 'admin.courses.source' | t }} <span>{{ sortArrow('fromLanguageCode') }}</span>
+            </th>
+            <th (click)="toggleSort('title')" style="cursor: pointer">
+              {{ 'admin.courses.titleCol' | t }} <span>{{ sortArrow('title') }}</span>
+            </th>
+            <th (click)="toggleSort('levelCode')" style="cursor: pointer">
+              {{ 'admin.courses.level' | t }} <span>{{ sortArrow('levelCode') }}</span>
+            </th>
+            <th (click)="toggleSort('createdAt')" style="cursor: pointer">
+              {{ 'stats.labels.table' | t }} <span>{{ sortArrow('createdAt') }}</span>
+            </th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let c of pageRows(); trackBy: trackById">
+            <td>{{ c.id }}</td>
+            <td class="d-flex align-items-center gap-2">
+              <img *ngIf="c.countryIconPath" [src]="c.countryIconPath" alt="" width="20" height="14"/>
+              <span>{{ c.learningLanguageCode }}</span>
+            </td>
+            <td>{{ c.fromLanguageCode }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ c.levelCode }}</td>
+            <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-1" (click)="edit(c)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="remove(c.id)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <div *ngIf="editingId() !== null" class="card mt-3">
+      <div class="card-header">
+        {{ isEdit() ? ('common.edit' | t) : ('common.add' | t) }} – {{ 'admin.courses.title' | t }}
+        <span *ngIf="isEdit()">#{{ editingId() }}</span>
+      </div>
+
+      <form class="card-body d-grid gap-2" [formGroup]="form" (ngSubmit)="save()">
+        <div class="row g-2">
+          <div class="col-md-4">
+            <label class="form-label" for="crsf-learning">{{ 'admin.courses.language' | t }}</label>
+            <select id="crsf-learning" class="form-select" formControlName="learningLanguageCode">
+              <option value="">{{ 'common.select' | t }}</option>
+              <option *ngFor="let c of languageCodes()" [value]="c">{{ c }}</option>
+            </select>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.learningLanguageCode.touched && form.controls.learningLanguageCode.invalid">
+              {{ 'validation.required' | t }}
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="form.controls.learningLanguageCode.errors?.['server'] as errs">
+              <div *ngFor="let m of errs">{{ m }}</div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label" for="crsf-from">{{ 'admin.courses.source' | t }}</label>
+            <select id="crsf-from" class="form-select" formControlName="fromLanguageCode">
+              <option value="">{{ 'common.select' | t }}</option>
+              <option *ngFor="let c of languageCodes()" [value]="c">{{ c }}</option>
+            </select>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.fromLanguageCode.touched && form.controls.fromLanguageCode.invalid">
+              {{ 'validation.required' | t }}
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="form.controls.fromLanguageCode.errors?.['server'] as errs">
+              <div *ngFor="let m of errs">{{ m }}</div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label" for="crsf-level">{{ 'admin.courses.level' | t }}</label>
+            <select id="crsf-level" class="form-select" formControlName="levelCode">
+              <option value="">{{ 'common.select' | t }}</option>
+              <option *ngFor="let l of levelCodes()" [value]="l">{{ l }}</option>
+            </select>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.controls.levelCode.touched && form.controls.levelCode.errors?.['required']">
+              {{ 'validation.required' | t }}
+            </div>
+            <div class="invalid-feedback d-block" *ngIf="form.controls.levelCode.errors?.['server'] as errs">
+              <div *ngFor="let m of errs">{{ m }}</div>
+            </div>
+          </div>
+        </div>
+
+        <label class="form-label" for="crsf-title">{{ 'admin.courses.titleCol' | t }}</label>
+        <input id="crsf-title" class="form-control" formControlName="title"
+               [placeholder]="'admin.courses.titleCol' | t"/>
+        <div class="invalid-feedback d-block" *ngIf="form.controls.title.touched && form.controls.title.invalid">
+          <ng-container *ngIf="form.controls.title.errors?.['required']">{{ 'validation.required' | t }}</ng-container>
+          <ng-container *ngIf="form.controls.title.errors?.['minlength']">{{ 'validation.minLength' | t:{min: 3} }}
+          </ng-container>
+          <ng-container *ngIf="form.controls.title.errors?.['maxlength']">{{ 'validation.maxLength' | t:{max: 200} }}
+          </ng-container>
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="form.controls.title.errors?.['server'] as errs">
+          <div *ngFor="let m of errs">{{ m }}</div>
+        </div>
+
+        <label class="form-label" for="crsf-desc">{{ 'admin.courses.description' | t }}</label>
+        <textarea id="crsf-desc" class="form-control" rows="3" formControlName="description"
+                  [placeholder]="'admin.courses.description' | t"></textarea>
+        <div class="invalid-feedback d-block" *ngIf="form.controls.description.errors?.['server'] as errs">
+          <div *ngFor="let m of errs">{{ m }}</div>
+        </div>
+
+        <div class="mt-2">
+          <label class="form-label">{{ 'admin.achievements.icon' | t }}</label>
+          <div class="row g-2 align-items-center">
+            <div class="col-auto">
+              <img
+                [src]="countryIconPreviewSrc()"
+                (error)="onCountryIconError($event)"
+                class="avatar-preview"
+                width="96"
+                height="96"
+                [alt]="'admin.achievements.icon' | t"
+              />
+            </div>
+            <div class="col">
+              <input
+                type="file"
+                class="form-control"
+                accept="image/png,image/jpeg,image/webp"
+                (change)="onCountryIconFileChange($event)"
+                [disabled]="uploadingIcon()"
+              />
+              <div *ngIf="uploadingIcon()" class="form-text">
+                {{ 'common.uploading' | t }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-2">
+          <button type="button" class="btn btn-light" (click)="cancel()">{{ 'common.cancel' | t }}</button>
+          <button class="btn btn-primary" [disabled]="form.invalid || uploadingIcon()">{{ 'common.save' | t }}</button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<div class="toast-container">
+  <div
+    class="toast-item"
+    *ngFor="let t of toasts(); trackBy: trackToast"
+    [class.success]="t.type === 'success'"
+    [class.error]="t.type === 'error'"
+    (click)="dismissToast(t.id)"
+  >
+    {{ t.text }}
+  </div>
+</div>
