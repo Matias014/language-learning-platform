@@ -15,6 +15,8 @@ The system consists of two main modules:
 
 The application supports user registration, login, course browsing, lesson navigation, exercise solving, progress tracking, spaced repetition, AI-assisted feedback, chat-based language practice and an administrative panel for content management.
 
+The application has also been deployed and tested on Amazon EC2 using Docker Compose as a portfolio-oriented AWS deployment.
+
 ## Main features
 
 ### User features
@@ -62,6 +64,7 @@ The application supports user registration, login, course browsing, lesson navig
 - Playwright
 - npm
 - Node.js 20.x LTS or newer
+- Nginx for serving the production build
 
 ### Backend
 
@@ -71,7 +74,6 @@ The application supports user registration, login, course browsing, lesson navig
 - Spring Data JPA
 - Spring Security
 - PostgreSQL
-- Docker / Docker Compose
 - Maven Wrapper
 - Claude API integration
 - Apache PDFBox
@@ -80,10 +82,16 @@ The application supports user registration, login, course browsing, lesson navig
 
 ### Infrastructure
 
+- Docker
 - Docker Compose
 - PostgreSQL container
 - Nginx container for serving the Angular production build
 - Spring Boot container for the backend API
+- Amazon EC2
+- IAM role for EC2
+- AWS security groups
+- CloudWatch billing alerts
+- AWS Budget for cost monitoring
 
 ## Repository structure
 
@@ -93,6 +101,7 @@ language-learning-platform/
 │   ├── docker/
 │   │   └── initdb/
 │   ├── photos/
+│   │   └── .gitkeep
 │   ├── src/
 │   ├── Dockerfile
 │   ├── .dockerignore
@@ -112,14 +121,18 @@ language-learning-platform/
 │   ├── package-lock.json
 │   ├── playwright.config.ts
 │   └── proxy.conf.json
+├── docs/
+│   └── aws-deployment.md
 ├── compose.yaml
+├── compose.ec2.yaml
+├── .env.ec2.example
 ├── .gitignore
 └── README.md
 ```
 
-## Quick start with Docker
+## Local quick start with Docker
 
-The recommended way to run the whole application is Docker Compose.
+The recommended way to run the whole application locally is Docker Compose.
 
 From the root directory:
 
@@ -151,9 +164,9 @@ or:
 http://localhost:8080/swagger-ui.html
 ```
 
-## Docker services
+## Local Docker services
 
-The Docker Compose setup starts:
+The local Docker Compose setup starts:
 
 - PostgreSQL database
 - Spring Boot backend
@@ -173,9 +186,130 @@ http://localhost:8080
 
 The frontend communicates with the backend through relative `/api` URLs. Nginx proxies `/api/*` requests to the backend container.
 
+## AWS deployment
+
+The application has been deployed and tested using a simple AWS setup intended for portfolio and recruitment purposes.
+
+Deployment setup:
+
+- Amazon EC2
+- Docker Compose
+- Angular production build served by Nginx
+- Spring Boot backend API
+- PostgreSQL running as a Docker container
+- IAM role assigned to the EC2 instance
+- Security group exposing only HTTP `80` publicly and SSH `22` from a restricted IP
+- CloudWatch billing alarm and AWS Budget for cost monitoring
+
+The AWS deployment uses:
+
+```text
+compose.ec2.yaml
+.env.ec2.example
+docs/aws-deployment.md
+```
+
+The real `.env.ec2` file is created only on the EC2 instance and must not be committed.
+
+The deployed application is available through the EC2 public IPv4 address while the instance is running. The public IP may change after stopping and starting the instance unless an Elastic IP is configured.
+
+Detailed deployment notes are available in:
+
+```text
+docs/aws-deployment.md
+```
+
+## AWS deployment architecture
+
+```text
+User browser
+    |
+    | HTTP :80
+    v
+Amazon EC2
+    |
+    | Docker Compose
+    |
+    |-- frontend container
+    |   Angular production build served by Nginx
+    |   Public port: 80
+    |
+    |-- backend container
+    |   Spring Boot REST API
+    |   Internal port: 8080
+    |
+    |-- database container
+        PostgreSQL
+        Internal port: 5432
+```
+
+Only the frontend container is exposed publicly.
+
+The backend and database are not exposed directly to the internet. The Nginx frontend container proxies `/api` requests to the backend container inside the Docker network.
+
+## AWS deployment quick start
+
+Create an environment file on the EC2 instance:
+
+```bash
+cp .env.ec2.example .env.ec2
+```
+
+Generate secrets:
+
+```bash
+openssl rand -base64 32
+openssl rand -base64 32
+openssl rand -hex 16
+```
+
+Fill `.env.ec2`:
+
+```env
+POSTGRES_PASSWORD=replace-with-strong-postgres-password
+SECURITY_JWT_SECRET=replace-with-generated-base64-secret
+SECURITY_FIELD_ENCRYPTION_KEY=replace-with-generated-base64-secret
+ANTHROPIC_API_KEY=
+```
+
+Start the AWS deployment:
+
+```bash
+docker compose --env-file .env.ec2 -f compose.ec2.yaml up -d --build
+```
+
+Check containers:
+
+```bash
+docker compose --env-file .env.ec2 -f compose.ec2.yaml ps
+```
+
+Expected result:
+
+```text
+language-learning-database    Up / healthy
+language-learning-backend     Up
+language-learning-frontend    Up
+```
+
+After deployment, the application is available at:
+
+```text
+http://EC2_PUBLIC_IP
+```
+
+Do not open backend or database ports publicly.
+
+These ports should remain internal:
+
+```text
+8080
+5432
+```
+
 ## Demo configuration
 
-The Docker Compose setup is intended for local portfolio testing and development preview.
+The local Docker Compose setup is intended for local portfolio testing and development preview.
 
 It uses public demo values for:
 
@@ -183,7 +317,7 @@ It uses public demo values for:
 - `SECURITY_FIELD_ENCRYPTION_KEY`
 - PostgreSQL username and password
 
-These values are safe only for local demo usage. Replace them before any production deployment.
+These values are safe only for local demo usage. Replace them before any public deployment.
 
 AI-assisted features require a real Anthropic Claude API key. By default, the Docker Compose setup runs with:
 
@@ -204,9 +338,11 @@ login: admin
 password: password
 ```
 
-These credentials are intended only for local testing.
+These credentials are intended only for local testing and portfolio demo usage.
 
 ## Stopping the application
+
+### Local Docker Compose
 
 Stop containers:
 
@@ -221,6 +357,24 @@ docker compose down -v
 ```
 
 Use `docker compose down -v` when you want to reset the local database completely.
+
+### AWS Docker Compose
+
+Stop containers on EC2:
+
+```bash
+docker compose --env-file .env.ec2 -f compose.ec2.yaml down
+```
+
+Stop containers and remove Docker volumes on EC2:
+
+```bash
+docker compose --env-file .env.ec2 -f compose.ec2.yaml down -v
+```
+
+Removing volumes deletes the PostgreSQL data stored in Docker.
+
+To reduce AWS costs, stop or terminate the EC2 instance when the deployment is no longer needed.
 
 ## Manual local development
 
@@ -408,10 +562,17 @@ The exact scripts depend on the current `package.json`.
 
 - Do not commit real secrets.
 - Do not commit `.env`.
+- Do not commit `.env.ec2`.
+- Do not commit `.env.aws`.
+- Do not commit `.pem` SSH keys.
 - Do not commit `secrets.properties`.
 - Do not commit real API keys.
+- Do not commit AWS access keys.
 - Do not use demo JWT or encryption keys in production.
-- The Docker Compose setup is for local demo usage only.
+- Do not expose PostgreSQL publicly.
+- Do not expose backend port `8080` publicly.
+- Restrict SSH access to a trusted IP address.
+- Use IAM roles instead of static AWS credentials.
 - Refresh tokens are stored in `HttpOnly` cookies.
 - Administrative endpoints are protected by role checks.
 - AI calls are performed only from the backend.
@@ -432,6 +593,12 @@ backend/secrets.properties
 backend/logs/
 backend/uploads/
 backend/photos/avatars/
+.env
+.env.local
+.env.production
+.env.ec2
+.env.aws
+*.pem
 ```
 
 ## Project context
@@ -447,6 +614,37 @@ Interactive foreign language learning platform with a conversational module base
 This repository contains the source code only.
 
 The written thesis document, university submission files, reviews and administrative documents are not included.
+
+## Portfolio summary
+
+This project demonstrates practical usage of:
+
+- Java 21
+- Spring Boot
+- REST API development
+- Spring Security and JWT authentication
+- PostgreSQL
+- Angular
+- TypeScript
+- Docker
+- Docker Compose
+- Nginx reverse proxy
+- Amazon EC2
+- IAM role configuration
+- AWS security groups
+- CloudWatch billing alerts
+- environment-based deployment configuration
+- full-stack deployment of Angular and Spring Boot
+
+Possible future improvements include:
+
+- Amazon RDS PostgreSQL
+- Amazon S3 file storage
+- CloudWatch Agent log collection
+- HTTPS and domain configuration
+- CI/CD pipeline
+- separate production Spring profile
+- database migration tool such as Flyway or Liquibase
 
 ## License
 
